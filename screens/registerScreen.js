@@ -14,14 +14,16 @@ import {
   BackHandler,
   Alert
 } from "react-native";
-// import {userController} from '../../parkingSpot/components/user/Controller.js';
+ import axios from 'axios';
+
+
 
 
 
 export default function App({navigation}) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState(" ");
+  const [password, setPassword] = useState(" ");
+  const [rol, setRol] = useState(" ");
 
   useEffect(() => {
     const backAction = () => {
@@ -43,16 +45,30 @@ export default function App({navigation}) {
   }, []);
   
   const SendToBackend = () => {
-    if(rol == "" || email == "" || password == "") {
-      alert("Please fill out all fields")
-      return
-    }
-    else{
-      userController.createUser(email, password, rol)
-      navigation.goBack()
-    }
-  }
 
+    const data = {
+      email: email,
+      password: password,
+      rol: rol
+      // email: 'n',
+      // password: 'n',
+      // rol: 'n'
+    };
+      // const config = {
+      //   method: 'post',
+      //   url: '//localhost:3000/user'
+      // }
+    axios.post('//localhost:3000/user', data,  { withCredentials: true })
+    .then(response => {
+      // Handle the response data
+      console.log(response.data);
+    })
+    .catch(error => {
+      // Handle any error that occurs during the request
+      console.error(error);
+  
+    })
+  }
   return (
     <View style={styles.container}>
         <ScrollView style={styles.focusThis}
@@ -61,9 +77,11 @@ export default function App({navigation}) {
             <View style={styles.inputView}>
                 <TextInput
                 style={styles.TextInput}
-                placeholder="Name"
+                placeholder="Rol"
+                value = {rol}
                 placeholderTextColor="#2A295C"
-                onChangeText={(rol) => setName(rol)}
+                onChangeText={setRol}
+                onChange={e => setRol(e.target.value)}
                 />
             </View>
             <View style={styles.inputView}>
@@ -71,7 +89,8 @@ export default function App({navigation}) {
                 style={styles.TextInput}
                 placeholder="Email"
                 placeholderTextColor="#2A295C"
-                onChangeText={(email) => setEmail(email)}
+                onChangeText={setEmail}
+                onChange={e => setEmail(e.target.value)}
                 />
             </View>
             <View style={styles.inputView}>
@@ -80,7 +99,8 @@ export default function App({navigation}) {
                 placeholder="Password"
                 placeholderTextColor="#2A295C"
                 secureTextEntry={true}
-                onChangeText={(password) => setPassword(password)}
+                onChangeText={setPassword}
+                onChange={e => setPassword(e.target.value)}
                 />
             </View>
             <TouchableOpacity style={styles.loginBtn} onPress={() => SendToBackend() /*navigation.navigate('RegisterDetail')*/}>
