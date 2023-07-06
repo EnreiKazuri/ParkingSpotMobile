@@ -16,10 +16,6 @@ import {
 } from "react-native";
  import axios from 'axios';
 
-
-
-
-
 export default function App({navigation}) {
   const [email, setEmail] = useState(" ");
   const [password, setPassword] = useState(" ");
@@ -50,14 +46,7 @@ export default function App({navigation}) {
       email: email,
       password: password,
       rol: rol
-      // email: 'n',
-      // password: 'n',
-      // rol: 'n'
     };
-      // const config = {
-      //   method: 'post',
-      //   url: '//localhost:3000/user'
-      // }
     axios.post('//localhost:3000/user', data,  { withCredentials: true })
     .then(response => {
       // Handle the response data
@@ -78,7 +67,6 @@ export default function App({navigation}) {
                 <TextInput
                 style={styles.TextInput}
                 placeholder="Rol"
-                value = {rol}
                 placeholderTextColor="#2A295C"
                 onChangeText={setRol}
                 onChange={e => setRol(e.target.value)}
@@ -155,11 +143,6 @@ const styles = StyleSheet.create({
     height: 20,
     marginTop: 100,
   },
-//   fromBottom: {
-//     flex: 1,
-//     justifyContent: 'flex-end',
-//     marginBottom: 36
-//   },
   loginBtn: {
     width: "80%",
     borderRadius: 25,
