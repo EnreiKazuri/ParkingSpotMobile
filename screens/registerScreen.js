@@ -4,37 +4,47 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   StyleSheet,
-  Text,
+  Text as TextNative,
   View,
   Image,
-  TextInput,
-  Button,
+  TextInput as TextInputNative,
+  Button as ButtonNative,
   TouchableOpacity,
   ScrollView,
   BackHandler,
   Alert
 } from "react-native";
  import axios from 'axios';
-
-
-
+ import { 
+  TextInput,
+  Snackbar,
+  Text,
+  Button,
+  IconButton,
+  Divider,
+} from "react-native-paper";
 
 
 export default function App({navigation}) {
-  const [email, setEmail] = useState(" ");
-  const [password, setPassword] = useState(" ");
-  const [rol, setRol] = useState(" ");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [rol, setRol] = useState("");
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     const backAction = () => {
-      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
-        {
-          text: 'Cancel',
-          onPress: () => null,
-          style: 'cancel',
-        },
-        {text: 'YES', onPress: () => navigation.goBack()},
-      ]);
+      if (email != "" || password != "" || rol != "") {
+        Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          {text: 'YES', onPress: () => navigation.goBack()},
+        ]);
+      }
+      else navigation.goBack();
       return true;
     };
 
@@ -69,12 +79,28 @@ export default function App({navigation}) {
   
     })
   }
+
+  const handleIconClick = () => {
+    setIsClicked(!isClicked);
+  };
+
   return (
     <View style={styles.container}>
         <ScrollView style={styles.focusThis}
         contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={styles.titleText}>Create an account</Text>
-            <View style={styles.inputView}>
+            <Text style={{color: '#6563DB',
+                          fontWeight: 'bold',
+                          fontSize: 45,
+                          }}>
+              Register
+            </Text>
+            <Text style={{marginBottom: 5,
+                          color: 'black',
+                          fontSize: 20,
+                          }}>
+              Create an account
+            </Text>
+            {/* <View style={styles.inputView}>
                 <TextInput
                 style={styles.TextInput}
                 placeholder="Rol"
@@ -83,8 +109,14 @@ export default function App({navigation}) {
                 onChangeText={setRol}
                 onChange={e => setRol(e.target.value)}
                 />
-            </View>
-            <View style={styles.inputView}>
+            </View> */}
+            <TextInput
+              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              label='Name'
+              mode='outlined'
+              onChangeText={(rol) => setRol(rol)}
+            />
+            {/* <View style={styles.inputView}>
                 <TextInput
                 style={styles.TextInput}
                 placeholder="Email"
@@ -92,8 +124,14 @@ export default function App({navigation}) {
                 onChangeText={setEmail}
                 onChange={e => setEmail(e.target.value)}
                 />
-            </View>
-            <View style={styles.inputView}>
+            </View> */}
+            <TextInput
+              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              label='Email'
+              mode='outlined'
+              onChangeText={(email) => setEmail(email)}
+            />
+            {/* <View style={styles.inputView}>
                 <TextInput
                 style={styles.TextInput}
                 placeholder="Password"
@@ -102,13 +140,71 @@ export default function App({navigation}) {
                 onChangeText={setPassword}
                 onChange={e => setPassword(e.target.value)}
                 />
+            </View> */}
+            <TextInput
+              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              label='Password'
+              mode='outlined'
+              onChangeText={(password) => setPassword(password)}
+              secureTextEntry={true}
+            />
+            <TextInput
+              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              label='Confirm Password'
+              mode='outlined'
+              onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
+              secureTextEntry={true}
+            />
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <IconButton 
+                icon={isClicked ? 'album' : 'adjust'}
+                iconColor={isClicked ? '#6563DB' : 'darkgrey'}
+                onPress={handleIconClick}/>
+              <Text>Terms and conditions or smth idk lol</Text>
             </View>
-            <TouchableOpacity style={styles.loginBtn} onPress={() => SendToBackend() /*navigation.navigate('RegisterDetail')*/}>
+            {/* <TouchableOpacity style={styles.loginBtn} onPress={() => SendToBackend()}>
                 <Text style={styles.loginText} >Create account</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.fromBottom}>
+            </TouchableOpacity> */}
+            <Button
+              style={{ marginTop: 25, fullWidth: true, width: '70%'}}
+              //labelStyle={{fontSize: 15, color: '#fff'}}
+              //contentStyle={{height: 50}}
+              labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
+              mode='contained'
+              onPress={() => SendToBackend()}
+              width='80%'>
+              Next
+            </Button>
+            {/* <TouchableOpacity style={styles.fromBottom}>
                 <Text style={styles.forgot_button} onPress={() => navigation.goBack()}>Cancel</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+              <Divider style={{ flex: 1, height: 2 }} />
+              <Text style={{ marginHorizontal: 10 }}>or</Text>
+              <Divider style={{ flex: 1, height: 2 }} />
+            </View>
+            <Button
+              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
+              mode='outlined'
+              icon='google'>
+              Continue with Google
+            </Button>
+            <Button
+              style={{ marginTop: 25, fullWidth: true, width: '70%'}}
+              labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
+              mode='outlined'
+              icon='microsoft'>
+              Continue with Microsoft
+            </Button>
+            <Button
+              style={{ marginTop: 25, fullWidth: true, width: '70%'}}
+              labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
+              mode='outlined'
+              icon='apple'>
+              Continue with Apple
+            </Button>
+            <Text style={{marginTop: 25, color: 'black'}} onPress={() => navigation.goBack()}>Cancel</Text>
         </ScrollView>
     </View>
   );
