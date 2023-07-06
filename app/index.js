@@ -6,6 +6,7 @@ import { Stack, useRouter } from 'expo-router';
 import  LoginScreen  from '../screens/loginScreen.js';
 import RegisterScreen from '../screens/registerScreen.js';
 import StartingScreen from '../screens/startingScreen.js';
+import MainScreen from '../screens/main.js';
 
 const App = () => {
     const router = useRouter();
@@ -16,6 +17,7 @@ const App = () => {
                 <Stack.Screen name="Starting" component={StartingScreen} options={{gestureDirection: 'vertical'}} />
                 <Stack.Screen name="Login" component={LoginScreen} options={{gestureDirection: 'vertical'}} />
                 <Stack.Screen name="Register" component={RegisterScreen}  options={{gestureDirection: 'vertical'}} />
+                <Stack.Screen name = "Main" component={MainScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
