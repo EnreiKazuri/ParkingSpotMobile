@@ -1,15 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   StyleSheet,
-  Text as TextNative,
   View,
-  Image,
-  TextInput as TextInputNative,
-  Button as ButtonNative,
-  TouchableOpacity,
   ScrollView,
   BackHandler,
   Alert
@@ -17,7 +10,6 @@ import {
  import axios from 'axios';
  import { 
   TextInput,
-  Snackbar,
   Text,
   Button,
   IconButton,
@@ -60,14 +52,7 @@ export default function App({navigation}) {
       email: email,
       password: password,
       rol: rol
-      // email: 'n',
-      // password: 'n',
-      // rol: 'n'
     };
-      // const config = {
-      //   method: 'post',
-      //   url: '//localhost:3000/user'
-      // }
     axios.post('//localhost:3000/user', data,  { withCredentials: true })
     .then(response => {
       // Handle the response data
@@ -88,6 +73,7 @@ export default function App({navigation}) {
     <View style={styles.container}>
         <ScrollView style={styles.focusThis}
         contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <StatusBar style="auto" />
             <Text style={{color: '#6563DB',
                           fontWeight: 'bold',
                           fontSize: 45,
@@ -100,56 +86,27 @@ export default function App({navigation}) {
                           }}>
               Create an account
             </Text>
-            {/* <View style={styles.inputView}>
-                <TextInput
-                style={styles.TextInput}
-                placeholder="Rol"
-                value = {rol}
-                placeholderTextColor="#2A295C"
-                onChangeText={setRol}
-                onChange={e => setRol(e.target.value)}
-                />
-            </View> */}
             <TextInput
-              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              style={styles.reducedMarginBtn}
               label='Name'
               mode='outlined'
               onChangeText={(rol) => setRol(rol)}
             />
-            {/* <View style={styles.inputView}>
-                <TextInput
-                style={styles.TextInput}
-                placeholder="Email"
-                placeholderTextColor="#2A295C"
-                onChangeText={setEmail}
-                onChange={e => setEmail(e.target.value)}
-                />
-            </View> */}
             <TextInput
-              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              style={styles.reducedMarginBtn}
               label='Email'
               mode='outlined'
               onChangeText={(email) => setEmail(email)}
             />
-            {/* <View style={styles.inputView}>
-                <TextInput
-                style={styles.TextInput}
-                placeholder="Password"
-                placeholderTextColor="#2A295C"
-                secureTextEntry={true}
-                onChangeText={setPassword}
-                onChange={e => setPassword(e.target.value)}
-                />
-            </View> */}
             <TextInput
-              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              style={styles.reducedMarginBtn}
               label='Password'
               mode='outlined'
               onChangeText={(password) => setPassword(password)}
               secureTextEntry={true}
             />
             <TextInput
-              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              style={styles.reducedMarginBtn}
               label='Confirm Password'
               mode='outlined'
               onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
@@ -162,43 +119,35 @@ export default function App({navigation}) {
                 onPress={handleIconClick}/>
               <Text>Terms and conditions or smth idk lol</Text>
             </View>
-            {/* <TouchableOpacity style={styles.loginBtn} onPress={() => SendToBackend()}>
-                <Text style={styles.loginText} >Create account</Text>
-            </TouchableOpacity> */}
             <Button
-              style={{ marginTop: 25, fullWidth: true, width: '70%'}}
-              //labelStyle={{fontSize: 15, color: '#fff'}}
-              //contentStyle={{height: 50}}
+              style={styles.button}
               labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
               mode='contained'
               onPress={() => SendToBackend()}
               width='80%'>
               Next
             </Button>
-            {/* <TouchableOpacity style={styles.fromBottom}>
-                <Text style={styles.forgot_button} onPress={() => navigation.goBack()}>Cancel</Text>
-            </TouchableOpacity> */}
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
               <Divider style={{ flex: 1, height: 2 }} />
               <Text style={{ marginHorizontal: 10 }}>or</Text>
               <Divider style={{ flex: 1, height: 2 }} />
             </View>
             <Button
-              style={{ marginTop: 15, fullWidth: true, width: '70%'}}
+              style={styles.reducedMarginBtn}
               labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
               mode='outlined'
               icon='google'>
               Continue with Google
             </Button>
             <Button
-              style={{ marginTop: 25, fullWidth: true, width: '70%'}}
+              style={styles.button}
               labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
               mode='outlined'
               icon='microsoft'>
               Continue with Microsoft
             </Button>
             <Button
-              style={{ marginTop: 25, fullWidth: true, width: '70%'}}
+              style={styles.button}
               labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
               mode='outlined'
               icon='apple'>
@@ -211,18 +160,13 @@ export default function App({navigation}) {
 }
 
 const styles = StyleSheet.create({
-    focusThis: {
-        display: "flex",
-        flexGrow: 1,
-        backgroundColor: "#fff",
-        width: "100%",
-        height: "100%",
-        padding: 10,
-    },
-    titleText: {
-        marginBottom: 100,
-        fontSize: 20,
-        fontWeight: "bold",
+  focusThis: {
+      display: "flex",
+      flexGrow: 1,
+      backgroundColor: "#fff",
+      width: "100%",
+      height: "100%",
+      padding: 10,
     },
   container: {
     display: "flex",
@@ -233,37 +177,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexGrow:1,
   },
-  inputView: {
-    backgroundColor: "#AAA9E1",
-    borderRadius: 30,
-    width: "70%",
-    height: 45,
-    marginBottom: 20,
-    alignItems: "stretch",
+  button: {
+    marginTop: 25, 
+    fullWidth: true, 
+    width: '70%',
   },
-  TextInput: {
-    height: 50,
-    flex: 1,
-    padding: 10,
-    textAlign: "center",
-  },
-  forgot_button: {
-    height: 20,
-    marginTop: 100,
-  },
-//   fromBottom: {
-//     flex: 1,
-//     justifyContent: 'flex-end',
-//     marginBottom: 36
-//   },
-  loginBtn: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 25,
-    marginBottom: 10,
-    backgroundColor: "#6563DB",
-  },
+  reducedMarginBtn: {
+    marginTop: 15,
+    fullWidth: true, 
+    width: '70%',
+  }
 });
