@@ -24,18 +24,17 @@ export default function App({navigation}) {
             <Text style={styles.loginText}>Sign up</Text>
         </TouchableOpacity> */}
                 <Button
-          style={{ marginTop: 15}}
+          style={{ marginTop: 15, fullWidth: true, width: '70%'}}
           icon='send'
           mode='contained'
           onPress={() => navigation.navigate('Login')}
           width='80%'
           >Log in</Button>
         <Button
-          style={{ marginTop: 25}}
+          style={{ marginTop: 25, fullWidth: true, width: '70%'}}
           icon='send'
           mode='contained'
           onPress={() => navigation.navigate('Register')}
-          width='80%'
           >Sign up</Button>
     </View>
   );
