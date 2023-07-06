@@ -20,7 +20,7 @@ export default function App({navigation}) {
         <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Login')}>
             <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Register')}>
             <Text style={styles.loginText}>Sign up</Text>
         </TouchableOpacity>
     </View>
