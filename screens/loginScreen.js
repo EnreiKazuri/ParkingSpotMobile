@@ -50,7 +50,7 @@ export default function App({navigation}) {
     .then(response => {
       // Handle the response data
       console.log(response.data);
-      response.data.body.success ? navigation.navigate('Register', {response}) : alert(response.data.body.message);
+      response.data.body.success ? navigation.navigate('Main', {response}) : alert(response.data.body.message);
     })
     .catch(error => {
       // Handle any error that occurs during the request
@@ -83,10 +83,7 @@ export default function App({navigation}) {
       <TouchableOpacity>
         <Text style={styles.forgot_button} /*onPress to recover password*/>Forgot Password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn} /*onPress to mainScreen*/ onPress={() => SendToBackend()}>
-=======
-      <TouchableOpacity style={styles.loginBtn} onPress={()=> navigation.navigate('Main')}/*onPress to mainScreen*/>
->>>>>>> Stashed changes
+      <TouchableOpacity style={styles.loginBtn} onPress={() => SendToBackend()}>
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
         <Text>Don't have an account? 

@@ -8,34 +8,48 @@ import {
   View,
   Image,
   TextInput,
-  Button,
   TouchableOpacity,
 } from "react-native";
+import { Button } from 'react-native-paper';
 
 export default function App({navigation}) {
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require("../assets/logo-no-background.png")} />
         <StatusBar style="auto" />
-        <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Login')}>
+        {/* <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Login')}>
             <Text style={styles.loginText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Register')}>
+        </TouchableOpacity> */}
+        {/* <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Register')}>
             <Text style={styles.loginText}>Sign up</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+                <Button
+          style={{ marginTop: 15}}
+          icon='send'
+          mode='contained'
+          onPress={() => navigation.navigate('Login')}
+          width='80%'
+          >Log in</Button>
+        <Button
+          style={{ marginTop: 25}}
+          icon='send'
+          mode='contained'
+          onPress={() => navigation.navigate('Register')}
+          width='80%'
+          >Sign up</Button>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-    loginText: {
-        color: "#fff",
-        fontWeight: 'bold',
-        alignSelf: 'center',
-    },
+    // loginText: {
+    //     color: "#fff",
+    //     fontWeight: 'bold',
+    //     alignSelf: 'center',
+    // },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    flexDirection: 'column',
     alignItems: "center",
     justifyContent: "center",
   },
@@ -45,14 +59,14 @@ const styles = StyleSheet.create({
     width: '95%',
     resizeMode: 'contain',
   },
-  loginBtn: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    justifyContent: "center",
-    marginTop: 25,
-    marginBottom: 10,
-    backgroundColor: "#6563DB",
-    alignItems: "stretch",
-  },
+  // loginBtn: {
+  //   width: "80%",
+  //   borderRadius: 25,
+  //   height: 50,
+  //   justifyContent: "center",
+  //   marginTop: 25,
+  //   marginBottom: 10,
+  //   backgroundColor: "#6563DB",
+  //   alignItems: "stretch",
+  // },
 });
