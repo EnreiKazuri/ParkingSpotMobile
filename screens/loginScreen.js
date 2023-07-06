@@ -18,7 +18,7 @@ import axios from 'axios';
 export default function App({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  
   useEffect(() => {
     const backAction = () => {
       Alert.alert('Hold on!', 'Are you sure you want to go back?', [
@@ -84,6 +84,9 @@ export default function App({navigation}) {
         <Text style={styles.forgot_button} /*onPress to recover password*/>Forgot Password?</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.loginBtn} /*onPress to mainScreen*/ onPress={() => SendToBackend()}>
+=======
+      <TouchableOpacity style={styles.loginBtn} onPress={()=> navigation.navigate('Main')}/*onPress to mainScreen*/>
+>>>>>>> Stashed changes
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
         <Text>Don't have an account? 
