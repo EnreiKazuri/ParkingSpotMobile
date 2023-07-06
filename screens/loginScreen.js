@@ -13,6 +13,7 @@ import {
   BackHandler,
   Alert
 } from "react-native";
+import axios from 'axios';
 
 export default function App({navigation}) {
   const [email, setEmail] = useState("");
@@ -39,6 +40,25 @@ export default function App({navigation}) {
     return () => backHandler.remove();
   }, []);
 
+  const SendToBackend = () => {
+
+    const data = {
+      email: email,
+      password: password,
+    };
+    axios.post('//localhost:3000/user/login', data,  { withCredentials: true })
+    .then(response => {
+      // Handle the response data
+      console.log(response.data);
+      response.data.body.success ? navigation.navigate('Register', {response}) : alert(response.data.body.message);
+    })
+    .catch(error => {
+      // Handle any error that occurs during the request
+      console.error(error);
+  
+    })
+  }
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require("../assets/parkingspot_crop_logo.png")} />
@@ -63,7 +83,7 @@ export default function App({navigation}) {
       <TouchableOpacity>
         <Text style={styles.forgot_button} /*onPress to recover password*/>Forgot Password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn} /*onPress to mainScreen*/>
+      <TouchableOpacity style={styles.loginBtn} /*onPress to mainScreen*/ onPress={() => SendToBackend()}>
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
         <Text>Don't have an account? 
