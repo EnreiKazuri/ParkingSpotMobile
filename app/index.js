@@ -13,15 +13,15 @@ const App = () => {
     const router = useRouter();
     const Stack = createNativeStackNavigator();
     return (
-        <NavigationContainer independent={true}>
-            <Stack.Navigator screenOptions={ { headerShown: false } }>
-                <Stack.Screen name="Starting" component={StartingScreen} options={{gestureDirection: 'vertical'}} />
-                <Stack.Screen name="Login" component={LoginScreen} options={{gestureDirection: 'vertical'}} />
-                <Stack.Screen name="Register" component={RegisterScreen}  options={{gestureDirection: 'vertical'}} />
-                <Stack.Screen name ="Main" component={MainScreen} options={{gestureDirection: 'vertical'}}/>
-                <Stack.Screen name = "Reserver" component={ReserverScreen} options={{gestureDirection:'vertical'}}/>
-            </Stack.Navigator>
-        </NavigationContainer>
+            <NavigationContainer independent={true}>
+                <Stack.Navigator screenOptions={ { headerShown: false } }>
+                    <Stack.Screen name="Starting" component={StartingScreen}/>
+                    <Stack.Screen name="Login" component={LoginScreen}/>
+                    <Stack.Screen name="Register" component={RegisterScreen} />
+                    <Stack.Screen name = "Main" component={MainScreen}/>
+                    <Stack.Screen name = "Reserver" component={ReserverScreen}/>
+                </Stack.Navigator>
+            </NavigationContainer>
     );
 }
 

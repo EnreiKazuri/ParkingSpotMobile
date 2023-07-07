@@ -1,34 +1,34 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   StyleSheet,
-  Text,
   View,
   Image,
-  TextInput,
-  Button,
-  TouchableOpacity,
   BackHandler,
-  Alert
 } from "react-native";
+import { 
+  TextInput,
+  Snackbar,
+  Text,
+  Button,
+} from "react-native-paper";
+import Icon from 'react-native-paper/src/components/Icon'
 import axios from 'axios';
 
 export default function App({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [visible, setVisible] = useState(false);
+  const onToggleSnackBar = () => setVisible(true);
+  const onDismissSnackBar = () => setVisible(false);
+  const [customAlert, setCustomAlert] = useState({
+    severity: "error",
+    message: "placeHolder",
+  });
+
   useEffect(() => {
     const backAction = () => {
-      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
-        {
-          text: 'Cancel',
-          onPress: () => null,
-          style: 'cancel',
-        },
-        {text: 'YES', onPress: () => navigation.goBack()},
-      ]);
+      navigation.goBack();
       return true;
     };
 
@@ -43,19 +43,19 @@ export default function App({navigation}) {
   const SendToBackend = () => {
 
     const data = {
-      email: email,
-      password: password,
+      email: email.toLowerCase(),
+      password: password.toLowerCase(),
     };
     axios.post('//localhost:3000/user/login', data,  { withCredentials: true })
     .then(response => {
       // Handle the response data
       console.log(response.data);
-      response.data.body.success ? navigation.navigate('Main', {response}) : alert(response.data.body.message);
+      response.data.body.success ? navigation.navigate('Main', {response}) : setCustomAlert({severity: "error", message: response.data.body.message}); onToggleSnackBar(); 
     })
     .catch(error => {
       // Handle any error that occurs during the request
       console.error(error);
-  
+      setCustomAlert({severity: "error", message: "One or more fields are empty"}); onToggleSnackBar();
     })
   }
 
@@ -63,32 +63,40 @@ export default function App({navigation}) {
     <View style={styles.container}>
       <Image style={styles.image} source={require("../assets/parkingspot_crop_logo.png")} />
       <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Email"
-          placeholderTextColor="#2A295C"
-          onChangeText={(email) => setEmail(email)}
+      <TextInput
+        style={styles.reducedMarginBtn}
+        label='Email'
+        mode='outlined'
+        onChangeText={(email) => setEmail(email)}
         />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          placeholderTextColor="#2A295C"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
+      <TextInput
+        style={styles.reducedMarginBtn}
+        label='Password'
+        mode='outlined'
+        onChangeText={(password) => setPassword(password)}
+        secureTextEntry={true}
         />
-      </View>
-      <TouchableOpacity>
-        <Text style={styles.forgot_button} /*onPress to recover password*/>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn} onPress={()=> navigation.navigate('Main')}/*onPress to mainScreen*/>
-        <Text style={styles.loginText}>Login</Text>
-      </TouchableOpacity>
-        <Text>Don't have an account? 
-          <Text style={styles.forgot_button} onPress={() => navigation.navigate('Register')}> Create account</Text>
+      <Text style={{marginTop: 15, color: '#6563DB'}}>Forgot Password?</Text>
+      <Button
+          style={styles.reducedMarginBtn}
+          mode='contained'
+          onPress={() => SendToBackend()}
+          width='80%'
+          >
+          Log in
+        </Button>
+        <Text style={{marginTop: 15}}>Don't have an account? 
+          <Text style={{marginTop: 15, color: '#6563DB'}} onPress={() => navigation.navigate('Register')}> Create account</Text>
         </Text>
+        <Snackbar 
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          style={{ backgroundColor: '#D1312A'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Icon source="alert-circle-outline" color="#fff" size={24} />
+            <Text style={{ marginLeft: 10, color: '#fff', fontWeight: 'bold'}}>{customAlert.message}</Text>
+          </View>
+        </Snackbar>
     </View>
   );
 }
@@ -99,6 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    flexGrow: 1,
   },
   image: {
     marginBottom: 40,
@@ -106,37 +115,14 @@ const styles = StyleSheet.create({
     width: '95%',
     resizeMode: 'contain',
   },
-  inputView: {
-    backgroundColor: "#AAA9E1",
-    borderRadius: 30,
-    width: "70%",
-    height: 45,
-    marginBottom: 20,
-    alignItems: "stretch",
+  button: {
+    marginTop: 25, 
+    fullWidth: true, 
+    width: '70%',
   },
-  TextInput: {
-    height: 50,
-    flex: 1,
-    padding: 10,
-    textAlign: "center",
-  },
-  forgot_button: {
-    height: 20,
-    marginBottom: 20,
-    color: "#6563DB",
-  },
-  loginText: {
-    color: "#fff",
-    fontWeight: 'bold',
-},
-  loginBtn: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 25,
-    marginBottom: 10,
-    backgroundColor: "#6563DB",
-  },
+  reducedMarginBtn: {
+    marginTop: 15,
+    fullWidth: true, 
+    width: '70%',
+  }
 });
