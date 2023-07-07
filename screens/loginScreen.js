@@ -74,6 +74,7 @@ export default function App({navigation}) {
         label='Password'
         mode='outlined'
         onChangeText={(password) => setPassword(password)}
+        secureTextEntry={true}
         />
       <Text style={{marginTop: 15, color: '#6563DB'}}>Forgot Password?</Text>
       <Button
