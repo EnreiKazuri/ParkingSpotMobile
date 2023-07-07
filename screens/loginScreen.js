@@ -5,6 +5,7 @@ import {
   View,
   Image,
   BackHandler,
+  Platform,
 } from "react-native";
 import { 
   TextInput,
@@ -41,16 +42,25 @@ export default function App({navigation}) {
   }, []);
 
   const SendToBackend = () => {
-
+    const generalUrl = 'http://localhost:3000/user/login';
+    const androidUrl = 'http://10.0.0.2/user/login';
+    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
     const data = {
       email: email.toLowerCase(),
-      password: password.toLowerCase(),
+      password: password,
     };
-    axios.post('//localhost:3000/user/login', data,  { withCredentials: true })
+    axios.post(axiosUrl, data,  { withCredentials: true })
     .then(response => {
       // Handle the response data
       console.log(response.data);
-      response.data.body.success ? navigation.navigate('Main', {response}) : setCustomAlert({severity: "error", message: response.data.body.message}); onToggleSnackBar(); 
+      if (response.data.body.success){
+        navigation.navigate('Register');
+        setCustomAlert({severity: "error", message: "Recibe respuesta"}); 
+        onToggleSnackBar();
+       }else{
+        setCustomAlert({severity: "error", message: response.data.body.message}); 
+        onToggleSnackBar();
+       }
     })
     .catch(error => {
       // Handle any error that occurs during the request
@@ -88,6 +98,14 @@ export default function App({navigation}) {
         <Text style={{marginTop: 15}}>Don't have an account? 
           <Text style={{marginTop: 15, color: '#6563DB'}} onPress={() => navigation.navigate('Register')}> Create account</Text>
         </Text>
+        <Button
+          style={styles.reducedMarginBtn}
+          mode='contained'
+          onPress={() => navigation.navigate('Reserver')}
+          width='80%'
+          >
+          Skip :D
+        </Button>
         <Snackbar 
           visible={visible}
           onDismiss={onDismissSnackBar}
