@@ -7,6 +7,7 @@ import  LoginScreen  from '../screens/loginScreen.js';
 import RegisterScreen from '../screens/registerScreen.js';
 import StartingScreen from '../screens/startingScreen.js';
 import MainScreen from '../screens/main.js';
+import ReserverScreen from '../screens/reserver.js';
 
 const App = () => {
     const router = useRouter();
@@ -18,6 +19,7 @@ const App = () => {
                     <Stack.Screen name="Login" component={LoginScreen}/>
                     <Stack.Screen name="Register" component={RegisterScreen} />
                     <Stack.Screen name = "Main" component={MainScreen}/>
+                    <Stack.Screen name = "Reserver" component={ReserverScreen}/>
                 </Stack.Navigator>
             </NavigationContainer>
     );

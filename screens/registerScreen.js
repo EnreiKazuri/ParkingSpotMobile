@@ -18,7 +18,6 @@ import {
 } from "react-native-paper";
 import Icon from 'react-native-paper/src/components/Icon'
 
-
 export default function App({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
