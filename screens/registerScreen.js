@@ -14,7 +14,9 @@ import {
   Button,
   IconButton,
   Divider,
+  Snackbar,
 } from "react-native-paper";
+import Icon from 'react-native-paper/src/components/Icon'
 
 
 export default function App({navigation}) {
@@ -23,10 +25,16 @@ export default function App({navigation}) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [rol, setRol] = useState("");
   const [isClicked, setIsClicked] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const onToggleSnackBar = () => setVisible(true);
+  const onDismissSnackBar = () => setVisible(false);
+  const [customAlert, setCustomAlert] = useState({
+    message: "placeHolder",
+  });
 
   useEffect(() => {
     const backAction = () => {
-      if (email != "" || password != "" || rol != "") {
+      if (email != "" || password != "" || rol != "" || confirmPassword != "") {
         Alert.alert('Hold on!', 'Are you sure you want to go back?', [
           {
             text: 'Cancel',
@@ -45,24 +53,37 @@ export default function App({navigation}) {
       backAction,
     );
   }, []);
-  
+  const CheckBeforeBackend = () => {
+    if (isClicked == false) {
+      setCustomAlert({message: "Terms and conditions must be accepted"}); onToggleSnackBar();
+    }
+    else if (password != confirmPassword) {
+      setCustomAlert({message: "Passwords don't match"}); onToggleSnackBar();
+    }
+    else{
+      SendToBackend();
+    }
+  }
+  const NotImplemented = () => {
+    setCustomAlert({message: "Not implemented, oops D:"}); onToggleSnackBar();
+  }
   const SendToBackend = () => {
-
     const data = {
-      email: email,
+      email: email.toLowerCase(),
       password: password,
-      rol: rol
+      rol: rol.toLowerCase(),
     };
-    axios.post('//localhost:3000/user', data,  { withCredentials: true })
-    .then(response => {
-      // Handle the response data
-      console.log(response.data);
-    })
-    .catch(error => {
-      // Handle any error that occurs during the request
-      console.error(error);
-  
-    })
+      axios.post('//localhost:3000/user', data,  { withCredentials: true })
+      .then(response => {
+        // Handle the response data
+        console.log(response.data);
+        response.data.body.success ? navigation.navigate('Main', {response}) : setCustomAlert({message: response.data.body.message}); onToggleSnackBar(); 
+      })
+      .catch(error => {
+        // Handle any error that occurs during the request
+        console.error(error);
+        setCustomAlert({message: "One or more fields are empty"}); onToggleSnackBar();
+      })
   }
 
   const handleIconClick = () => {
@@ -123,7 +144,7 @@ export default function App({navigation}) {
               style={styles.button}
               labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
               mode='contained'
-              onPress={() => SendToBackend()}
+              onPress={() => CheckBeforeBackend()}
               width='80%'>
               Next
             </Button>
@@ -136,25 +157,34 @@ export default function App({navigation}) {
               style={styles.reducedMarginBtn}
               labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
               mode='outlined'
-              icon='google'>
+              icon='google' onPress={() => NotImplemented()}>
               Continue with Google
             </Button>
             <Button
               style={styles.button}
               labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
               mode='outlined'
-              icon='microsoft'>
+              icon='microsoft' onPress={() => NotImplemented()}>
               Continue with Microsoft
             </Button>
             <Button
               style={styles.button}
               labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
               mode='outlined'
-              icon='apple'>
+              icon='apple' onPress={() => NotImplemented()}>
               Continue with Apple
             </Button>
             <Text style={{marginTop: 25, color: 'black'}} onPress={() => navigation.goBack()}>Cancel</Text>
         </ScrollView>
+        <Snackbar 
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          style={{ backgroundColor: '#D1312A'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Icon source="alert-circle-outline" color="#fff" size={24} />
+            <Text style={{ marginLeft: 10, color: '#fff', fontWeight: 'bold'}}>{customAlert.message}</Text>
+          </View>
+        </Snackbar>
     </View>
   );
 }
