@@ -88,24 +88,15 @@ export default function App({navigation}) {
         />
       <Text style={{marginTop: 15, color: '#6563DB'}}>Forgot Password?</Text>
       <Button
-          style={styles.reducedMarginBtn}
-          mode='contained'
-          onPress={() => SendToBackend()}
-          width='80%'
-          >
+        style={styles.reducedMarginBtn}
+        mode='contained'
+        onPress={() => SendToBackend()}
+        width='80%'>
           Log in
-        </Button>
+      </Button>
         <Text style={{marginTop: 15}}>Don't have an account? 
           <Text style={{marginTop: 15, color: '#6563DB'}} onPress={() => navigation.navigate('Register')}> Create account</Text>
         </Text>
-        <Button
-          style={styles.reducedMarginBtn}
-          mode='contained'
-          onPress={() => navigation.navigate('Reserver')}
-          width='80%'
-          >
-          Skip :D
-        </Button>
         <Snackbar 
           visible={visible}
           onDismiss={onDismissSnackBar}
