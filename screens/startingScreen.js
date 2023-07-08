@@ -14,6 +14,7 @@ export default function App({navigation}) {
         <StatusBar style="auto" />
         <Button
           style={styles.button}
+          buttonColor='#6563DB'
           icon='send'
           mode='contained'
           onPress={() => navigation.navigate('Login')}
@@ -24,8 +25,20 @@ export default function App({navigation}) {
           style={styles.button}
           icon='send'
           mode='contained'
+          buttonColor='#6563DB'
           onPress={() => navigation.navigate('Register')}
           >Sign up</Button>
+          <Button
+          style={{marginTop: 25, 
+                  fullWidth: true, 
+                  width: '70%',
+                  }}
+          buttonColor='black'
+          icon='cog'
+          mode='contained'
+          onPress={() => navigation.navigate('Debug')}>
+          Debug
+          </Button>
     </View>
   );
 }
