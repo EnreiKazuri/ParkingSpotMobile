@@ -6,8 +6,15 @@ import { Stack, useRouter } from 'expo-router';
 import  LoginScreen  from '../screens/loginScreen.js';
 import RegisterScreen from '../screens/registerScreen.js';
 import StartingScreen from '../screens/startingScreen.js';
-import MainScreen from '../screens/main.js';
-import ReserverScreen from '../screens/reserver.js';
+import MainContainer from '../screens/mainContainer.js';
+import MapScreen from '../screens/mapScreen.js';
+import DebugScreen from '../screens/debugScreen.js';
+import NewCarScreen from '../screens/newCarScreen.js';
+import CarListScreen from '../screens/carListScreen.js';
+import DetailedMapScreen from '../screens/detailedMapScreen.js';
+import ReservationScreen from '../screens/reservationScreen.js';
+import SignDetailScreen from '../screens/signDetScreen.js';
+
 
 const App = () => {
     const router = useRouter();
@@ -18,8 +25,14 @@ const App = () => {
                     <Stack.Screen name="Starting" component={StartingScreen}/>
                     <Stack.Screen name="Login" component={LoginScreen}/>
                     <Stack.Screen name="Register" component={RegisterScreen} />
-                    <Stack.Screen name = "Main" component={MainScreen}/>
-                    <Stack.Screen name = "Reserver" component={ReserverScreen}/>
+                    <Stack.Screen name="Debug" component={DebugScreen}/>
+                    <Stack.Screen name="Main" component={MainContainer}/>
+                    <Stack.Screen name="Map" component={MapScreen}/>
+                    <Stack.Screen name="NewCar" component={NewCarScreen}/>
+                    <Stack.Screen name="CarList" component={CarListScreen}/>
+                    <Stack.Screen name="DetailedMap" component={DetailedMapScreen}/>
+                    <Stack.Screen name="Reservation" component={ReservationScreen}/>
+                    <Stack.Screen name="SignDetail" component={SignDetailScreen}/>
                 </Stack.Navigator>
             </NavigationContainer>
     );
