@@ -18,12 +18,6 @@ export default function ActivateUser() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Activate User</Text>
-      <TextInput
-        placeholder="Activation Code"
-        value={activationCode}
-        onChangeText={setActivationCode}
-        style={styles.input}
-      />
       <Button title="Activate" onPress={handleActivate} style={styles.button} />
     </View>
   );
