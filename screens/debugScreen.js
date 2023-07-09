@@ -118,6 +118,22 @@ export default function MainScreen({navigation}){
                 onPress={() => navigation.navigate('CarList')}>
                 Car list
             </Button>
+            <Button
+                style={styles.reducedMarginBtn}
+                buttonColor='darkorange'
+                icon='alert-outline'
+                mode='contained'
+                onPress={() => navigation.navigate('ActiveUser')}>
+                Activate User
+            </Button>
+            <Button
+                style={styles.reducedMarginBtn}
+                buttonColor='darkorange'
+                icon='alert-outline'
+                mode='contained'
+                onPress={() => navigation.navigate('ForgotPassword')}>
+                Forgot Password
+            </Button>
             </View>
             <Snackbar 
             visible={visible}

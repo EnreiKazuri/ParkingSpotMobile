@@ -14,6 +14,8 @@ import CarListScreen from '../screens/carListScreen.js';
 import DetailedMapScreen from '../screens/detailedMapScreen.js';
 import ReservationScreen from '../screens/reservationScreen.js';
 import SignDetailScreen from '../screens/signDetScreen.js';
+import ActivateUser from '../screens/activeuserScreen.js';
+import ForgotPassword from '../screens/forgotPasswordScreen.js';
 
 
 const App = () => {
@@ -33,6 +35,8 @@ const App = () => {
                     <Stack.Screen name="DetailedMap" component={DetailedMapScreen}/>
                     <Stack.Screen name="Reservation" component={ReservationScreen}/>
                     <Stack.Screen name="SignDetail" component={SignDetailScreen}/>
+                    <Stack.Screen name = "ActiveUser" component={ActivateUser}/>
+                    <Stack.Screen name = "ForgotPassword" component={ForgotPassword}/>
                 </Stack.Navigator>
             </NavigationContainer>
     );
