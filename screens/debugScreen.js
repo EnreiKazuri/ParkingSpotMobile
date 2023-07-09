@@ -134,6 +134,14 @@ export default function MainScreen({navigation}){
                 onPress={() => navigation.navigate('ForgotPassword')}>
                 Forgot Password
             </Button>
+            <Button
+                style={styles.reducedMarginBtn}
+                buttonColor='darkorange'
+                icon='alert-outline'
+                mode='contained'
+                onPress={() => navigation.navigate('ResetPassword')}>
+                Reset Password
+            </Button>
             </View>
             <Snackbar 
             visible={visible}
