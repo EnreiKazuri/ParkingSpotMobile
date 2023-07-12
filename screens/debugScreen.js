@@ -99,7 +99,7 @@ export default function MainScreen({navigation}){
                 buttonColor='darkorange'
                 icon='alert-outline'
                 mode='contained'
-                onPress={() => onToggleSnackBar()}>
+                onPress={() => navigation.navigate('ProfileView')}>
                 Profile View
             </Button>
             <Button
