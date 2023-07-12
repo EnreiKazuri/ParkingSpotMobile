@@ -46,8 +46,8 @@ export default function MainScreen({navigation}){
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkred'
-                icon='window-close'
+                buttonColor='darkorange'
+                icon='alert-outline'
                 mode='contained'
                 onPress={() => navigation.navigate('NewCar')}>
                 New Car
