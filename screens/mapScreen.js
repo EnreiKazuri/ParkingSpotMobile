@@ -5,7 +5,7 @@ import {
     TextInput,
     Button,
 } from "react-native";
-import MapView,{Marker} from 'react-native-maps'
+// import MapView,{Marker} from 'react-native-maps'
 
 export default function ReserverScreen(){
     const [licensePlate, setLicensePlate] = useState('');
@@ -30,7 +30,7 @@ export default function ReserverScreen(){
     return (
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
-            <MapView
+            {/* <MapView
               style={{ flex: 1 }}
               initialRegion={{
                 latitude: 18.48778,
@@ -41,7 +41,7 @@ export default function ReserverScreen(){
               onPress={handleMapPress}
             >
               {location && <Marker coordinate={location} />}
-            </MapView>
+            </MapView> */}
           </View>
           <View style={{ flex: 1, padding: 20 }}>
             <Text style={{ fontSize: 24, marginBottom: 20 }}>Reservas</Text>
