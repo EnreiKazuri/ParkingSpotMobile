@@ -22,6 +22,7 @@ export default function MainScreen() {
     { value: 7, parkingLot: "El Sotano", label: 'Instituto Tecnologico de Santo Domingo'},
     { value: 8, parkingLot: "Parqueo Reservado", label: 'Banco Popular' },
     { value: 9, parkingLot: "Personal Asignado", label: 'La casa de Pablo' },
+    { value: 10, parkingLot: "Mundo muy lejano", label: 'Por donde Abel' },
   ];
   const RenderLastSelected = () => {
     return lastSelected.map((item, index) => (
@@ -60,7 +61,7 @@ export default function MainScreen() {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onChange={item => {
-            setValue(item.value);
+            setLocation(item.value);
             setIsFocused(false);
           }}
         />
