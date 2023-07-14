@@ -86,7 +86,7 @@ export default function App({navigation}) {
         onChangeText={(password) => setPassword(password)}
         secureTextEntry={true}
         />
-      <Text style={{marginTop: 15, color: '#6563DB'}}>Forgot Password?</Text>
+      <Text style={{marginTop: 15, color: '#6563DB'}} onPress={() => navigation.navigate("ForgotPassword")}>Forgot Password?</Text>
       <Button
         style={styles.reducedMarginBtn}
         mode='contained'
@@ -94,18 +94,15 @@ export default function App({navigation}) {
         width='80%'>
           Log in
       </Button>
-        <Text style={{marginTop: 15}}>Don't have an account? 
-          <Text style={{marginTop: 15, color: '#6563DB'}} onPress={() => navigation.navigate('Register')}> Create account</Text>
-        </Text>
-        <Snackbar 
-          visible={visible}
-          onDismiss={onDismissSnackBar}
-          style={{ backgroundColor: '#D1312A'}}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon source="alert-circle-outline" color="#fff" size={24} />
-            <Text style={{ marginLeft: 10, color: '#fff', fontWeight: 'bold'}}>{customAlert.message}</Text>
-          </View>
-        </Snackbar>
+      <Snackbar 
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        style={{ backgroundColor: '#D1312A'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Icon source="alert-circle-outline" color="#fff" size={24} />
+          <Text style={{ marginLeft: 10, color: '#fff', fontWeight: 'bold'}}>{customAlert.message}</Text>
+        </View>
+      </Snackbar>
     </View>
   );
 }
