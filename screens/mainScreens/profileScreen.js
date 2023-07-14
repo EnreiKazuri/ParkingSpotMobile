@@ -16,6 +16,7 @@ export default function ProfileScreen({navigation}) {
     lastname: "Perez",
     email: "peresitoeljuanito@gmail.com",
     phone: "123-456-7890",
+    password: "123456",
   };
 
   return (
