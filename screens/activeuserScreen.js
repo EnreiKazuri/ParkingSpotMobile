@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
+import { Text, Button, TextInput } from "react-native-paper";
 // import { Button, TextInput } from "react-native-paper";
 
-export default function ActivateUser() {
+export default function ActivateUser({navigation}) {
   const [activationCode, setActivationCode] = useState("");
 
   const handleActivate = () => {
@@ -18,7 +19,27 @@ export default function ActivateUser() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Activate User</Text>
-      <Button title="Activate" onPress={handleActivate} style={styles.button} />
+      <Button
+          style={styles.button}
+          mode='contained'
+          buttonColor="black"
+          onPress={() => handleActivate()}>
+          Send Activation Code
+      </Button>
+      <TextInput
+        style={styles.button}
+        label='Code'
+        mode='outlined'
+        onChangeText={(activationCode) => setActivationCode(activationCode)}
+      />
+      <Button
+          style={styles.button}
+          icon='exclamation-thick'
+          mode='contained'
+          buttonColor="black"
+          onPress={() => handleActivate()}>
+          Activate
+      </Button>
     </View>
   );
 }
@@ -32,7 +53,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   input: {
     width: '80%',
@@ -45,9 +66,8 @@ const styles = StyleSheet.create({
   button: {
     width: 200,
     height: 40,
-    backgroundColor: "#6563db",
-    color: "white",
     borderRadius: 5,
     margin: 10,
+    width: '90%',
   },
 });
