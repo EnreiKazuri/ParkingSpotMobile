@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 // import { Button, TextInput } from "react-native-paper";
+import { Text, TextInput, Button } from "react-native-paper";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -17,23 +18,42 @@ export default function ResetPassword() {
     }
   };
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={styles.container}>
       <Text style={{ fontSize: 24, marginBottom: 20 }}>Reset Password</Text>
       <TextInput
-        style={{ width: "80%", height: 40, borderWidth: 1, marginBottom: 20 }}
-        placeholder="New Password"
-        secureTextEntry
-        value={password}
-        onChangeText={(text) => setPassword(text)}
+        style={styles.button}
+        label='New Password'
+        mode='outlined'
+        onChangeText={(password) => setPassword(password)}
       />
       <TextInput
-        style={{ width: "80%", height: 40, borderWidth: 1, marginBottom: 20 }}
-        placeholder="Confirm Password"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={(text) => setConfirmPassword(text)}
+        style={styles.button}
+        label='Confirm Password'
+        mode='outlined'
+        onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
       />
-      <Button title="Reset Password" onPress={handleResetPassword} />
+      <Button
+          style={styles.button}
+          mode='contained'
+          buttonColor="black"
+          onPress={() => handleResetPassword()}>
+          Reset Password
+      </Button>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    flexGrow: 1,
+  },
+  button: {
+    marginTop: 25, 
+    fullWidth: true, 
+    width: '90%',
+  },
+});
