@@ -18,6 +18,7 @@ import ActivateUser from "../screens/activeuserScreen.js";
 import ForgotPassword from "../screens/forgotPasswordScreen.js";
 import ResetPassword from "../screens/resetPasswordScreen.js";
 import ProfileScreen from "../screens/mainScreens/profileScreen.js";
+import SettingsScreen from "../screens/mainScreens/settingsScreen.js";
 
 const App = () => {
   const router = useRouter();
@@ -40,6 +41,7 @@ const App = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="ProfileView" component={ProfileScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
