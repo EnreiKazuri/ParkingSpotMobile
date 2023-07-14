@@ -3,14 +3,16 @@ import {
     Text,
     View,
     TextInput,
-    Button,
+    StyleSheet
 } from "react-native";
-// import MapView,{Marker} from 'react-native-maps'
+import { Button } from 'react-native-paper';
+import MapView, {Marker} from 'react-native-maps'
 
-export default function ReserverScreen(){
+export default function ReserverScreen({navigation}){
     const [licensePlate, setLicensePlate] = useState('');
     const [parkingDuration, setParkingDuration] = useState('');
     const [location, setLocation] = useState('');
+    const google = window.google;
 
     const handleReservation = () =>{
         console.log('License Plate:', licensePlate);
@@ -29,8 +31,8 @@ export default function ReserverScreen(){
 
     return (
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 1 }}>
-            {/* <MapView
+          <View style={{ flex: 9 }}>
+            <MapView
               style={{ flex: 1 }}
               initialRegion={{
                 latitude: 18.48778,
@@ -41,24 +43,25 @@ export default function ReserverScreen(){
               onPress={handleMapPress}
             >
               {location && <Marker coordinate={location} />}
-            </MapView> */}
+            </MapView>
           </View>
-          <View style={{ flex: 1, padding: 20 }}>
-            <Text style={{ fontSize: 24, marginBottom: 20 }}>Reservas</Text>
-            <TextInput
-              placeholder="License Plate"
-              value={licensePlate}
-              onChangeText={(text) => setLicensePlate(text)}
-              style={{ width: '100%', height: 40, borderWidth: 1, marginBottom: 10, padding: 5 }}
-            />
-            <TextInput
-              placeholder="Parking Duration"
-              value={parkingDuration}
-              onChangeText={(text) => setParkingDuration(text)}
-              style={{ width: '100%', height: 40, borderWidth: 1, marginBottom: 20, padding: 5 }}
-            />
-            <Button title="Make Reservation" onPress={handleReservation} color="#6563DB" />
+          <View style={{ flex: 1, padding: 20, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center'}}>
+            <Button
+            style={styles.reducedMarginBtn}
+            mode='contained'
+            onPress={() => navigation.goBack()}>
+              Cancel
+            </Button>
           </View>
         </View>
       );
     };
+
+const styles = StyleSheet.create({
+  reducedMarginBtn: {
+    marginTop: 15,
+    fullWidth: true, 
+    width: '70%',
+    backgroundColor: 'black'
+  }
+});

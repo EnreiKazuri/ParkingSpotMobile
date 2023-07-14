@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet} from "react-native";
+import { View, StyleSheet, ScrollView} from "react-native";
 import { Button, Snackbar, Text } from 'react-native-paper';
 import Icon from 'react-native-paper/src/components/Icon'
 
@@ -9,7 +9,7 @@ export default function MainScreen({navigation}){
     const onToggleSnackBar = () => setVisible(true);
     const onDismissSnackBar = () => setVisible(false);
     return(
-        <View style ={{flex:1, flexDirection: 'row', alignItems:'center'}}>
+        <ScrollView style ={{flex:1}} contentContainerStyle={{flexDirection: 'row', alignItems: 'center'}}>
             <StatusBar style="auto" />
             <View style={{width:'50%', alignItems: 'center'}}>
             <Button
@@ -152,7 +152,7 @@ export default function MainScreen({navigation}){
                     <Text style={{ marginLeft: 10, color: '#fff', fontWeight: 'bold'}}>Not available yet</Text>
                 </View>
             </Snackbar>
-        </View>
+        </ScrollView>
     );
 }
 const styles = StyleSheet.create({

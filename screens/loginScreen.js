@@ -43,7 +43,7 @@ export default function App({navigation}) {
 
   const SendToBackend = () => {
     const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://10.0.0.2/user/login';
+    const androidUrl = 'http://192.168.100.101:3000/user/login';
     const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
     const data = {
       email: email.toLowerCase(),
@@ -54,7 +54,7 @@ export default function App({navigation}) {
       // Handle the response data
       console.log(response.data);
       if (response.data.body.success){
-        navigation.navigate('Register');
+        navigation.navigate('Main');
         setCustomAlert({severity: "error", message: "Recibe respuesta"}); 
         onToggleSnackBar();
        }else{

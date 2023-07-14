@@ -67,12 +67,15 @@ export default function App({navigation}) {
     setCustomAlert({message: "Not implemented, oops D:"}); onToggleSnackBar();
   }
   const SendToBackend = () => {
+    const generalUrl = 'http://localhost:3000/user/';
+    const androidUrl = 'http://192.168.100.101:3000/user/';
+    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;    
     const data = {
       email: email.toLowerCase(),
       password: password,
       rol: rol.toLowerCase(),
     };
-      axios.post('//localhost:3000/user', data,  { withCredentials: true })
+      axios.post(axiosUrl, data,  { withCredentials: true })
       .then(response => {
         // Handle the response data
         console.log(response.data);

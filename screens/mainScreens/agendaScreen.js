@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     width: '100%',
     padding: 16,
-    marginTop: 30,
+    paddingTop: 35,
     backgroundColor: '#fff',
   },
   containerRecent: {
