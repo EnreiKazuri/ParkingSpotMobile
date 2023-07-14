@@ -46,16 +46,16 @@ export default function MainScreen({navigation}){
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkorange'
-                icon='alert-outline'
+                buttonColor='green'
+                icon='check-bold'
                 mode='contained'
                 onPress={() => navigation.navigate('NewCar')}>
                 New Car
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkorange'
-                icon='alert-outline'
+                buttonColor='green'
+                icon='check-bold'
                 mode='contained'
                 onPress={() => navigation.navigate('Main')}>
                 Dashboard
@@ -96,48 +96,48 @@ export default function MainScreen({navigation}){
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkorange'
-                icon='alert-outline'
+                buttonColor='green'
+                icon='check-bold'
                 mode='contained'
                 onPress={() => navigation.navigate('ProfileView')}>
                 Profile View
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkorange'
-                icon='alert-outline'
+                buttonColor='green'
+                icon='check-bold'
                 mode='contained'
                 onPress={() => onToggleSnackBar()}>
                 Agenda
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkred'
-                icon='window-close'
+                buttonColor='green'
+                icon='check-bold'
                 mode='contained'
                 onPress={() => navigation.navigate('CarList')}>
                 Car list
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkorange'
-                icon='alert-outline'
+                buttonColor='green'
+                icon='check-bold'
                 mode='contained'
                 onPress={() => navigation.navigate('ActiveUser')}>
                 Activate User
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkorange'
-                icon='alert-outline'
+                buttonColor='green'
+                icon='check-bold'
                 mode='contained'
                 onPress={() => navigation.navigate('ForgotPassword')}>
                 Forgot Password
             </Button>
             <Button
                 style={styles.reducedMarginBtn}
-                buttonColor='darkorange'
-                icon='alert-outline'
+                buttonColor='green'
+                icon='check-bold'
                 mode='contained'
                 onPress={() => navigation.navigate('ResetPassword')}>
                 Reset Password
