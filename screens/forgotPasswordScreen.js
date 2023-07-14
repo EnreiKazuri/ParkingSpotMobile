@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   Alert,
-  Button,
 } from "react-native";
+import { Text, TextInput, Button } from "react-native-paper";
 // import { Button, TextInput } from "react-native-paper";
 
 export default function ForgotPassword() {
@@ -26,15 +24,37 @@ export default function ForgotPassword() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 24, marginBottom: 20, fontWeight: 'bold'}}>Forgot Password</Text>
+    <View style={styles.container}>
+      <Text style={{ fontSize: 24, marginBottom: 20, fontWeight: 'bold'}}>Password recovery</Text>
       <TextInput
-        style={{ width: '80%', height: 40, borderWidth: 1, marginBottom: 20 }}
-        placeholder="Email"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
+        style={styles.button}
+        label='Email'
+        mode='outlined'
+        onChangeText={(email) => setEmail(email)}
       />
-      <Button title="Reset Password" onPress={handleResetPassword} />
+      <Button
+          style={styles.button}
+          icon='exclamation-thick'
+          mode='contained'
+          buttonColor="black"
+          onPress={() => handleResetPassword()}>
+          Send mail
+      </Button>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    flexGrow: 1,
+  },
+  button: {
+    marginTop: 25, 
+    fullWidth: true, 
+    width: '90%',
+  },
+});
