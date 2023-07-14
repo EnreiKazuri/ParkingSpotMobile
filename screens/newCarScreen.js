@@ -5,11 +5,12 @@ import {
   Text,
   Button,
   Snackbar,
+  IconButton,
 } from "react-native-paper";
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export default function NewCarScreen() {
+export default function NewCarScreen({navigation}) {
   const [maker, setMaker] = React.useState('');
   const [model, setModel] = React.useState('');
   const [licensePlate, setLicensePlate] = React.useState('');
@@ -128,6 +129,7 @@ export default function NewCarScreen() {
         width='80%'>
         Done
       </Button>
+      <IconButton icon="arrow-left-bold" iconColor='black' style={{alignSelf: 'flex-start'}} size={30} onPress={() => navigation.goBack()}/>
     </View>
   );
 }
