@@ -12,7 +12,6 @@ export default function ReserverScreen({navigation}){
     const [licensePlate, setLicensePlate] = useState('');
     const [parkingDuration, setParkingDuration] = useState('');
     const [location, setLocation] = useState('');
-    const google = window.google;
 
     const handleReservation = () =>{
         console.log('License Plate:', licensePlate);
@@ -37,8 +36,8 @@ export default function ReserverScreen({navigation}){
               initialRegion={{
                 latitude: 18.48778,
                 longitude: -69.96327,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitudeDelta: 0.000922,
+                longitudeDelta: 0.000421,
               }}
               onPress={handleMapPress}
             >

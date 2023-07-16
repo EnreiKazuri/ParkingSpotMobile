@@ -9,6 +9,7 @@ import {
 } from "react-native-paper";
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import axios from 'axios';
 
 export default function NewCarScreen({navigation}) {
   const [maker, setMaker] = React.useState('');
@@ -35,6 +36,24 @@ export default function NewCarScreen({navigation}) {
     { value: 2, label: 'Blue', color: 'blue'},
     { value: 3, label: 'Green', color: 'green'},
   ];
+  // const getData = () => {
+  //   const generalUrl = 'http://localhost:3000/color';
+  //   const androidUrl = 'http://192.168.43.36:3000/color';
+  //   const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+  //   axios.get(axiosUrl)
+  //   .then(function (response) {
+  //     // populate colors, with response.data
+  //     console.log(response.data);
+  //     response.data.body.forEach(element => {
+  //       colors.push({value: element.id, label: element.color, color: element.name.toLowerCase()});
+  //     });
+  //     console.log(response.data);
+  //   })
+  //   .catch(function (error) {
+  //     // handle error
+  //     console.log(error);
+  //   })
+  // };
 
   const handleModel = (value) => {
     let modelArray = [];
@@ -125,7 +144,7 @@ export default function NewCarScreen({navigation}) {
         style={styles.reducedMarginBtn}
         labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
         mode='contained'
-        onPress={() => CheckBeforeBackend()}
+        onPress={() => getData()}
         width='80%'>
         Done
       </Button>

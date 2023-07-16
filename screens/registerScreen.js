@@ -68,7 +68,7 @@ export default function App({navigation}) {
   }
   const SendToBackend = () => {
     const generalUrl = 'http://localhost:3000/user/';
-    const androidUrl = 'http://192.168.100.101:3000/user/';
+    const androidUrl = 'http://192.168.43.36:3000/user/';
     const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;    
     const data = {
       email: email.toLowerCase(),
@@ -79,7 +79,7 @@ export default function App({navigation}) {
       .then(response => {
         // Handle the response data
         console.log(response.data);
-        response.data.body.success ? navigation.navigate('Main', {response}) : setCustomAlert({message: response.data.body.message}); onToggleSnackBar(); 
+        response.data.error == "" ? navigation.navigate('SignDetail', {name: data.rol, email: data.email, password: data.password}) : setCustomAlert({message: response.data.body.message}); onToggleSnackBar(); 
       })
       .catch(error => {
         // Handle any error that occurs during the request

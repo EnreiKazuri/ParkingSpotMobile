@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Divider, List, Text } from 'react-native-paper';
 
-export default function MainScreen() {
+export default function MainScreen({navigation}) {
   const [location, setLocation] = React.useState('');
   const [isFocused, setIsFocused] = React.useState(false);
   const locationList = [
@@ -24,6 +24,9 @@ export default function MainScreen() {
     { value: 9, parkingLot: "Personal Asignado", label: 'La casa de Pablo' },
     { value: 10, parkingLot: "Mundo muy lejano", label: 'Por donde Abel' },
   ];
+  const conditionalNavigate = () => {
+    if (location == 2) navigation.navigate('Map');
+  };
   const RenderLastSelected = () => {
     return lastSelected.map((item, index) => (
       <View style={styles.containerRecent}>
@@ -63,6 +66,7 @@ export default function MainScreen() {
           onChange={item => {
             setLocation(item.value);
             setIsFocused(false);
+            conditionalNavigate();
           }}
         />
       </View>

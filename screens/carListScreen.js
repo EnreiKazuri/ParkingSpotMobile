@@ -44,7 +44,7 @@ export default function CarListScreen({navigation}) {
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView style={{flex: 8, backgroundColor: '#fff'}} contentContainerStyle={{alignItems: 'center'}}>
+      <ScrollView style={{height: '80%', backgroundColor: '#fff'}} contentContainerStyle={{alignItems: 'center'}}>
         <Text variant='headlineLarge' style={{fontWeight: 'bold', color: '#6563DB'}}>My Cars</Text>
         {RenderCars()}
       </ScrollView>

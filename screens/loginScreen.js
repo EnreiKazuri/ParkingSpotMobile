@@ -43,7 +43,7 @@ export default function App({navigation}) {
 
   const SendToBackend = () => {
     const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://192.168.100.101:3000/user/login';
+    const androidUrl = 'http://192.168.43.36:3000/user/login';
     const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
     const data = {
       email: email.toLowerCase(),

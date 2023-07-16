@@ -3,20 +3,20 @@ import { View, StyleSheet, Image } from "react-native";
 import { List, Divider, Text, Button, Snackbar } from 'react-native-paper'
 import Icon from 'react-native-paper/src/components/Icon'
 
-export default function ProfileScreen({navigation}) {
+export default function ProfileScreen({route, navigation}) {
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
   const [visible, setVisible] = useState(false);
   const onToggleSnackBar = () => setVisible(true);
   const onDismissSnackBar = () => setVisible(false);
-
+  
   const user = {
-    name: "Juan",
-    lastname: "Perez",
-    email: "peresitoeljuanito@gmail.com",
-    phone: "123-456-7890",
-    password: "123456",
+    name: route.params.name,
+    lastname: route.params.lastName,
+    email: route.params.email,
+    phone: route.params.phone,
+    password: route.params.password,
   };
 
   return (
