@@ -15,45 +15,88 @@ export default function NewCarScreen({navigation}) {
   const [maker, setMaker] = React.useState('');
   const [model, setModel] = React.useState('');
   const [licensePlate, setLicensePlate] = React.useState('');
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState('black');
   const [isFocused, setIsFocused] = React.useState(false);
   const [modelData, setModelData] = React.useState([]);
-  const makerList = [
-    { value: 1, label: 'Toyota' },
-    { value: 2, label: 'Ford' },
-    { value: 3, label: 'Nissan' },
-  ];
-  const modelList = [
-    { value: 1, label: 'Corolla', parentValue: 1 },
-    { value: 2, label: 'Mustang', parentValue: 2 },
-    { value: 3, label: 'Camry', parentValue: 1 },
-    { value: 3, label: 'Altima', parentValue: 3 },
-    { value: 3, label: 'Bronco', parentValue: 2 },
-    { value: 3, label: 'Mirai', parentValue: 1 },
-  ];
-  const colors = [
-    { value: 1, label: 'Red', color: 'red'},
-    { value: 2, label: 'Blue', color: 'blue'},
-    { value: 3, label: 'Green', color: 'green'},
-  ];
-  // const getData = () => {
-  //   const generalUrl = 'http://localhost:3000/color';
-  //   const androidUrl = 'http://192.168.43.36:3000/color';
-  //   const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
-  //   axios.get(axiosUrl)
-  //   .then(function (response) {
-  //     // populate colors, with response.data
-  //     console.log(response.data);
-  //     response.data.body.forEach(element => {
-  //       colors.push({value: element.id, label: element.color, color: element.name.toLowerCase()});
-  //     });
-  //     console.log(response.data);
-  //   })
-  //   .catch(function (error) {
-  //     // handle error
-  //     console.log(error);
-  //   })
-  // };
+  const [makerList, setMakerList] = React.useState([]);
+  // const makerList = [
+  //   { value: 1, label: 'Toyota' },
+  //   { value: 2, label: 'Ford' },
+  //   { value: 3, label: 'Nissan' },
+  // ];
+  const [modelList, setModelList] = React.useState([]);
+  // const modelList = [
+  //   { value: 1, label: 'Corolla', parentValue: 1 },
+  //   { value: 2, label: 'Mustang', parentValue: 2 },
+  //   { value: 3, label: 'Camry', parentValue: 1 },
+  //   { value: 3, label: 'Altima', parentValue: 3 },
+  //   { value: 3, label: 'Bronco', parentValue: 2 },
+  //   { value: 3, label: 'Mirai', parentValue: 1 },
+  // ];
+  const [colorList, setColorList] = React.useState([]);
+  // const colors = [
+  //   { value: 1, label: 'Red', color: 'red'},
+  //   { value: 2, label: 'Blue', color: 'blue'},
+  //   { value: 3, label: 'Green', color: 'green'},
+  // ];
+ 
+  useEffect(() => {
+    GetBrandData();
+    GetModelData();
+    GetColorData();
+  }, []);
+
+  const GetBrandData = () => {
+    const generalUrl = 'http://localhost:3000/user/login';
+    const androidUrl = 'http://10.111.0.252:3000/brand';
+    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    axios.get(axiosUrl, { withCredentials: true })
+    .then(response => {
+        console.log(response.data);
+        response.data.body.forEach(maker => {
+          makerList.push({value: maker._id, label: maker.brand});
+        });
+    })
+    .catch(error => {
+        console.log(error);
+    } )
+  };
+
+  const GetModelData = () => {
+    const generalUrl = 'http://localhost:3000/user/login';
+    const androidUrl = 'http://10.111.0.252:3000/model';
+    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    axios.get(axiosUrl, { withCredentials: true })
+    .then(response => {
+        console.log(response.data);
+        response.data.body.forEach(model => {
+          modelList.push({value: model._id, parentValue: model.brand._id, label: model.model});
+        });
+    })
+    .catch(error => {
+        console.log(error);
+    } )
+  };
+
+  const GetColorData = () => {
+    const generalUrl = 'http://localhost:3000/user/login';
+    const androidUrl = 'http://10.111.0.252:3000/color';
+    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    axios.get(axiosUrl, { withCredentials: true })
+    .then(response => {
+        console.log(response.data);
+        response.data.body.forEach(color => {
+          colorList.push({value: color._id, label: color.color});
+        });
+    })
+    .catch(error => {
+        console.log(error);
+    } )
+  };
+
+  const SendToBackend = () => {
+  
+  };
 
   const handleModel = (value) => {
     let modelArray = [];
@@ -125,7 +168,7 @@ export default function NewCarScreen({navigation}) {
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
-          data={colors}
+          data={colorList}
           maxHeight={300}
           labelField="label"
           valueField="value"
@@ -136,15 +179,15 @@ export default function NewCarScreen({navigation}) {
             setIsFocused(false);
             handleColor(item.color);
           }}
-          renderLeftIcon={() => (
-            <AntDesign color={selectedColor} name="pluscircle" size={20} style={{marginRight: 10}}/>
-          )}
+          // renderLeftIcon={() => (
+          //   <AntDesign color={selectedColor.show} name="pluscircle" size={20} style={{marginRight: 10}}/>
+          // )}
         />
       <Button
         style={styles.reducedMarginBtn}
         labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
         mode='contained'
-        onPress={() => getData()}
+        onPress={() => SendToBackend()}
         width='80%'>
         Done
       </Button>
