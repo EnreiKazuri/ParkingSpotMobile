@@ -11,12 +11,10 @@ import MainScreen from './mainScreens/mainScreen.js';
 
 export default function MainContainer({route, navigation}){
     const user = {
-        name: route.params.name,
-        lastname: route.params.lastName,
+        id: route.params._id,
         email: route.params.email,
-        phone: route.params.phone,
         password: route.params.password,
-      };
+    };
     const Tab = createMaterialBottomTabNavigator();
     return(
         <View style={{ flex: 1 }}>
