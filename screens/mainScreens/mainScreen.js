@@ -1,47 +1,89 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Divider, List, Text } from 'react-native-paper';
+import axios from 'axios';
 
 export default function MainScreen({navigation}) {
   const [location, setLocation] = React.useState('');
   const [isFocused, setIsFocused] = React.useState(false);
-  const locationList = [
-    { value: 1, label: 'Instituto Tecnologico de Santo Domingo' },
-    { value: 2, label: 'Banco Popular' },
-    { value: 3, label: 'La casa de Pablo' },
-  ];
-  
-  const lastSelected = [
-    { value: 1, parkingLot: "El Sotano", label: 'Instituto Tecnologico de Santo Domingo'},
-    { value: 2, parkingLot: "Parqueo Reservado", label: 'Banco Popular' },
-    { value: 3, parkingLot: "Personal Asignado", label: 'La casa de Pablo' },
-    { value: 4, parkingLot: "El Desierto", label: 'Instituto Tecnologico de Santo Domingo'},
-    { value: 5, parkingLot: "Parqueo de profesores", label: 'Instituto Tecnologico de Santo Domingo' },
-    { value: 6, parkingLot: "Parqueo de Invitados", label: 'La casa de Pablo' },
-    { value: 7, parkingLot: "El Sotano", label: 'Instituto Tecnologico de Santo Domingo'},
-    { value: 8, parkingLot: "Parqueo Reservado", label: 'Banco Popular' },
-    { value: 9, parkingLot: "Personal Asignado", label: 'La casa de Pablo' },
-    { value: 10, parkingLot: "Mundo muy lejano", label: 'Por donde Abel' },
-  ];
+  const [locationList, setLocationList] = React.useState([]);
+  // const locationList = [
+  //   { value: 1, label: 'Instituto Tecnologico de Santo Domingo' },
+  //   { value: 2, label: 'Banco Popular' },
+  //   { value: 3, label: 'La casa de Pablo' },
+  // ];
+  const [lastSelected, setLastSelected] = React.useState([]);
+  // const lastSelected = [
+  //   { value: 1, parkingLot: "El Sotano", label: 'Instituto Tecnologico de Santo Domingo'},
+  //   { value: 2, parkingLot: "Parqueo Reservado", label: 'Banco Popular' },
+  //   { value: 3, parkingLot: "Personal Asignado", label: 'La casa de Pablo' },
+  //   { value: 4, parkingLot: "El Desierto", label: 'Instituto Tecnologico de Santo Domingo'},
+  //   { value: 5, parkingLot: "Parqueo de profesores", label: 'Instituto Tecnologico de Santo Domingo' },
+  //   { value: 6, parkingLot: "Parqueo de Invitados", label: 'La casa de Pablo' },
+  //   { value: 7, parkingLot: "El Sotano", label: 'Instituto Tecnologico de Santo Domingo'},
+  //   { value: 8, parkingLot: "Parqueo Reservado", label: 'Banco Popular' },
+  //   { value: 9, parkingLot: "Personal Asignado", label: 'La casa de Pablo' },
+  //   { value: 10, parkingLot: "Mundo muy lejano", label: 'Por donde Abel' },
+  // ];
+
+  // const user = {
+  //   name: route.params.name,
+  //   lastname: route.params.lastName,
+  //   email: route.params.email,
+  //   phone: route.params.phone,
+  //   password: route.params.password,
+  // };
+
+  useEffect(() => {
+    GetLocationData();
+    //GetHistoryData();
+  }, []);
+
+  const GetLocationData = () => {
+    const generalUrl = 'http://localhost:3000/organization/info';
+    const androidUrl = 'http://192.168.43.36:3000/organization/info';
+    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    axios.get(axiosUrl, { withCredentials: true })
+    .then(response => {
+        const newLocationList = [];
+        console.log(response.data);
+        response.data.body.forEach(location => {
+          newLocationList.push({value: location._id, label: location.organizationName, coordinates: location.coodernates});
+        });
+        setLocationList(newLocationList);
+    })
+    .catch(error => {
+      console.error(error);
+    })
+  }
+
   const conditionalNavigate = () => {
-    if (location == 2) navigation.navigate('Map');
+    navigation.navigate('Map', location._id);
   };
   const RenderLastSelected = () => {
-    return lastSelected.map((item, index) => (
-      <View style={styles.containerRecent}>
-        <List.Item
-        key={index}
-        title={item.parkingLot}
-        description={item.label}
-        left={props => <List.Icon {...props} icon="history" />}
-        right={props => <List.Icon {...props} icon="greater-than" />}
-        titleStyle={{fontSize: 16, fontWeight: 'bold'}}
-        style={{flexWrap: 'nowrap'}}
-      />
-      <Divider style={{height: 1, width: "100%" }} bold={false}/>
-      </View>
-    ));
+    if (lastSelected.length == 0) return (
+      <View>
+        <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 50, color:'gray'}}>
+          No recent reservations
+        </Text>
+      </View>);
+    else {
+      return lastSelected.map((item, index) => (
+        <View style={styles.containerRecent}>
+          <List.Item
+          key={index}
+          title={item.parkingLot}
+          description={item.label}
+          left={props => <List.Icon {...props} icon="history" />}
+          right={props => <List.Icon {...props} icon="greater-than" />}
+          titleStyle={{fontSize: 16, fontWeight: 'bold'}}
+          style={{flexWrap: 'nowrap'}}
+        />
+        <Divider style={{height: 1, width: "100%" }} bold={false}/>
+        </View>
+      ));
+    }
   };
 
   return (

@@ -1,3 +1,4 @@
+//#region Imports
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import {
@@ -15,8 +16,9 @@ import {
 } from "react-native-paper";
 import Icon from 'react-native-paper/src/components/Icon'
 import axios from 'axios';
-
+//#endregion
 export default function App({navigation}) {
+  //#region Consts
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -26,7 +28,7 @@ export default function App({navigation}) {
     severity: "error",
     message: "placeHolder",
   });
-
+  //#endregion
   useEffect(() => {
     const backAction = () => {
       navigation.goBack();
@@ -54,7 +56,8 @@ export default function App({navigation}) {
       // Handle the response data
       console.log(response.data);
       if (response.data.body.success){
-        navigation.navigate('Main');
+        let user = response.data.body.user;
+        navigation.navigate('Main', user);
         setCustomAlert({severity: "error", message: "Recibe respuesta"}); 
         onToggleSnackBar();
        }else{
