@@ -17,6 +17,7 @@ import {
   Snackbar,
 } from "react-native-paper";
 import Icon from 'react-native-paper/src/components/Icon'
+import {IP_URL} from "@env";
 
 export default function App({navigation}) {
   const [email, setEmail] = useState("");
@@ -67,9 +68,7 @@ export default function App({navigation}) {
     setCustomAlert({message: "Not implemented, oops D:"}); onToggleSnackBar();
   }
   const SendToBackend = () => {
-    const generalUrl = 'http://localhost:3000/user/';
-    const androidUrl = 'http://192.168.43.36:3000/user/';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;    
+    const axiosUrl = `${IP_URL}/user/`    
     const data = {
       email: email.toLowerCase(),
       password: password,

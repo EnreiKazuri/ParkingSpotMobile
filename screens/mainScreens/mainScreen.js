@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Divider, List, Text } from 'react-native-paper';
 import axios from 'axios';
+import {IP_URL} from "@env";
 
 export default function MainScreen({navigation}) {
   const [location, setLocation] = React.useState('');
@@ -41,9 +42,7 @@ export default function MainScreen({navigation}) {
   }, []);
 
   const GetLocationData = () => {
-    const generalUrl = 'http://localhost:3000/organization/info';
-    const androidUrl = 'http://192.168.43.36:3000/organization/info';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    const axiosUrl = `${IP_URL}/organization/info`
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
         const newLocationList = [];

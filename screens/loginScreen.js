@@ -16,6 +16,7 @@ import {
 } from "react-native-paper";
 import Icon from 'react-native-paper/src/components/Icon'
 import axios from 'axios';
+import {IP_URL} from "@env";
 //#endregion
 export default function App({navigation}) {
   //#region Consts
@@ -44,9 +45,7 @@ export default function App({navigation}) {
   }, []);
 
   const SendToBackend = () => {
-    const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://192.168.43.36:3000/user/login';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    const axiosUrl = `${IP_URL}user/login`;
     const data = {
       email: email.toLowerCase(),
       password: password,

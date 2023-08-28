@@ -10,6 +10,7 @@ import {
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
+import {IP_URL} from "@env";
 
 export default function NewCarScreen({navigation}) {
   const [maker, setMaker] = React.useState('');
@@ -47,9 +48,7 @@ export default function NewCarScreen({navigation}) {
   }, []);
 
   const GetBrandData = () => {
-    const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://10.111.0.252:3000/brand';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    const axiosUrl = `${IP_URL}/brand`
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
         console.log(response.data);
@@ -63,9 +62,7 @@ export default function NewCarScreen({navigation}) {
   };
 
   const GetModelData = () => {
-    const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://10.111.0.252:3000/model';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    const axiosUrl = `${IP_URL}/model`
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
         console.log(response.data);
@@ -79,9 +76,7 @@ export default function NewCarScreen({navigation}) {
   };
 
   const GetColorData = () => {
-    const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://10.111.0.252:3000/color';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+    const axiosUrl = `${IP_URL}/color`
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
         console.log(response.data);

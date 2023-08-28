@@ -8,6 +8,7 @@ import {
 import { Button } from 'react-native-paper';
 import MapView, {Marker} from 'react-native-maps'
 import axios from 'axios';
+import {IP_URL} from "@env";
 
 export default function ReserverScreen({ navigation}){
     const [licensePlate, setLicensePlate] = useState('');
@@ -21,9 +22,7 @@ export default function ReserverScreen({ navigation}){
     }, []);
 
     const GetMarkers = () => {
-      const generalUrl = 'http://localhost:3000/organization/info';
-      const androidUrl = 'http://192.168.43.36:3000/parking-lot?64b17c3c40102dc7689d776e';
-      const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
+      const axiosUrl = `${IP_URL}/parking-lot?${locationID}`;
       axios.get(axiosUrl, { withCredentials: true })
       .then(response => {
           const newMarkerList = [];
@@ -68,12 +67,6 @@ export default function ReserverScreen({ navigation}){
               }}
               onPress={handleMapPress}
             >
-              {/* {location &&  */}
-              {/* <Marker coordinate={{
-                latitude: 18.48778,
-                longitude: -69.96327,
-              }}
-              onPress={openLot}/> */}
               {printMarkers()}
             </MapView>
           </View>
