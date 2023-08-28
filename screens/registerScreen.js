@@ -1,14 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
+import { StyleSheet, View, ScrollView, BackHandler, Alert } from "react-native";
+import axios from "axios";
 import {
-  StyleSheet,
-  View,
-  ScrollView,
-  BackHandler,
-  Alert
-} from "react-native";
- import axios from 'axios';
- import { 
   TextInput,
   Text,
   Button,
@@ -18,8 +12,16 @@ import {
 } from "react-native-paper";
 import Icon from 'react-native-paper/src/components/Icon'
 import {IP_URL} from "@env";
+import * as Localization from "expo-localization";
+import { I18n } from "i18n-js";
+import { translations } from "../localization";
 
-export default function App({navigation}) {
+export default function App({ navigation }) {
+  const i18n = new I18n(translations);
+  let [locale, setLocale] = useState(Localization.locale);
+  i18n.defaultLocale = "en";
+  i18n.locale = locale;
+  i18n.enableFallback = true;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,57 +37,66 @@ export default function App({navigation}) {
   useEffect(() => {
     const backAction = () => {
       if (email != "" || password != "" || rol != "" || confirmPassword != "") {
-        Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+        Alert.alert("Hold on!", "Are you sure you want to go back?", [
           {
-            text: 'Cancel',
+            text: "Cancel",
             onPress: () => null,
-            style: 'cancel',
+            style: "cancel",
           },
-          {text: 'YES', onPress: () => navigation.goBack()},
+          { text: "YES", onPress: () => navigation.goBack() },
         ]);
-      }
-      else navigation.goBack();
+      } else navigation.goBack();
       return true;
     };
 
     const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
+      "hardwareBackPress",
+      backAction
     );
   }, []);
   const CheckBeforeBackend = () => {
     if (isClicked == false) {
-      setCustomAlert({message: "Terms and conditions must be accepted"}); onToggleSnackBar();
-    }
-    else if (password != confirmPassword) {
-      setCustomAlert({message: "Passwords don't match"}); onToggleSnackBar();
-    }
-    else{
+      setCustomAlert({ message: "Terms and conditions must be accepted" });
+      onToggleSnackBar();
+    } else if (password != confirmPassword) {
+      setCustomAlert({ message: "Passwords don't match" });
+      onToggleSnackBar();
+    } else {
       SendToBackend();
     }
-  }
+  };
   const NotImplemented = () => {
-    setCustomAlert({message: "Not implemented, oops D:"}); onToggleSnackBar();
-  }
+    setCustomAlert({ message: "Not implemented, oops D:" });
+    onToggleSnackBar();
+  };
   const SendToBackend = () => {
-    const axiosUrl = `${IP_URL}/user/`    
+    const axiosUrl = `${IP_URL}/user/` 
     const data = {
       email: email.toLowerCase(),
       password: password,
       rol: rol.toLowerCase(),
     };
-      axios.post(axiosUrl, data,  { withCredentials: true })
-      .then(response => {
+    axios
+      .post(axiosUrl, data, { withCredentials: true })
+      .then((response) => {
         // Handle the response data
         console.log(response.data);
-        response.data.error == "" ? navigation.navigate('SignDetail', {name: data.rol, email: data.email, password: data.password}) : setCustomAlert({message: response.data.body.message}); onToggleSnackBar(); 
+        response.data.error == ""
+          ? navigation.navigate("SignDetail", {
+            name: data.rol,
+            email: data.email,
+            password: data.password,
+          })
+          : setCustomAlert({ message: response.data.body.message });
+        onToggleSnackBar();
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle any error that occurs during the request
         console.error(error);
-        setCustomAlert({message: "One or more fields are empty"}); onToggleSnackBar();
-      })
-  }
+        setCustomAlert({ message: "One or more fields are empty" });
+        onToggleSnackBar();
+      });
+  };
 
   const handleIconClick = () => {
     setIsClicked(!isClicked);
@@ -93,112 +104,132 @@ export default function App({navigation}) {
 
   return (
     <View style={styles.container}>
-        <ScrollView style={styles.focusThis}
-        contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <StatusBar style="auto" />
-            <Text style={{color: '#6563DB',
-                          fontWeight: 'bold',
-                          fontSize: 45,
-                          }}>
-              Register
-            </Text>
-            <Text style={{marginBottom: 5,
-                          color: 'black',
-                          fontSize: 20,
-                          }}>
-              Create an account
-            </Text>
-            <TextInput
-              style={styles.reducedMarginBtn}
-              label='Name'
-              mode='outlined'
-              onChangeText={(rol) => setRol(rol)}
-            />
-            <TextInput
-              style={styles.reducedMarginBtn}
-              label='Email'
-              mode='outlined'
-              onChangeText={(email) => setEmail(email)}
-            />
-            <TextInput
-              style={styles.reducedMarginBtn}
-              label='Password'
-              mode='outlined'
-              onChangeText={(password) => setPassword(password)}
-              secureTextEntry={true}
-            />
-            <TextInput
-              style={styles.reducedMarginBtn}
-              label='Confirm Password'
-              mode='outlined'
-              onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
-              secureTextEntry={true}
-            />
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <IconButton 
-                icon={isClicked ? 'album' : 'adjust'}
-                iconColor={isClicked ? '#6563DB' : 'darkgrey'}
-                onPress={handleIconClick}/>
-              <Text>Terms and conditions or smth idk lol</Text>
-            </View>
-            <Button
-              style={styles.button}
-              labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
-              mode='contained'
-              onPress={() => CheckBeforeBackend()}
-              width='80%'>
-              Next
-            </Button>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-              <Divider style={{ flex: 1, height: 2 }} />
-              <Text style={{ marginHorizontal: 10 }}>or</Text>
-              <Divider style={{ flex: 1, height: 2 }} />
-            </View>
-            <Button
-              style={styles.reducedMarginBtn}
-              labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
-              mode='outlined'
-              icon='google' onPress={() => NotImplemented()}>
-              Continue with Google
-            </Button>
-            <Button
-              style={styles.button}
-              labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
-              mode='outlined'
-              icon='microsoft' onPress={() => NotImplemented()}>
-              Continue with Microsoft
-            </Button>
-            <Button
-              style={styles.button}
-              labelStyle={{color: 'black', fontWeight: 'bold', fontSize: 15}}
-              mode='outlined'
-              icon='apple' onPress={() => NotImplemented()}>
-              Continue with Apple
-            </Button>
-            <Text style={{marginTop: 25, color: 'black'}} onPress={() => navigation.goBack()}>Cancel</Text>
-        </ScrollView>
-        <Snackbar 
-          visible={visible}
-          onDismiss={onDismissSnackBar}
-          style={{ backgroundColor: '#D1312A'}}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon source="alert-circle-outline" color="#fff" size={24} />
-            <Text style={{ marginLeft: 10, color: '#fff', fontWeight: 'bold'}}>{customAlert.message}</Text>
-          </View>
-        </Snackbar>
+      <ScrollView
+        style={styles.focusThis}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <StatusBar style="auto" />
+        <Text style={{ color: "#6563DB", fontWeight: "bold", fontSize: 45 }}>
+          {i18n.t("register")}
+        </Text>
+        <Text style={{ marginBottom: 5, color: "black", fontSize: 20 }}>
+          {i18n.t("createaccount")}
+        </Text>
+        <TextInput
+          style={styles.reducedMarginBtn}
+          label={i18n.t("name")}
+          mode="outlined"
+          onChangeText={(rol) => setRol(rol)}
+        />
+        <TextInput
+          style={styles.reducedMarginBtn}
+          label={i18n.t("email")}
+          mode="outlined"
+          onChangeText={(email) => setEmail(email)}
+        />
+        <TextInput
+          style={styles.reducedMarginBtn}
+          label={i18n.t("password")}
+          mode="outlined"
+          onChangeText={(password) => setPassword(password)}
+          secureTextEntry={true}
+        />
+        <TextInput
+          style={styles.reducedMarginBtn}
+          label={i18n.t("confirmpassword")}
+          mode="outlined"
+          onChangeText={(confirmPassword) =>
+            setConfirmPassword(confirmPassword)
+          }
+          secureTextEntry={true}
+        />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <IconButton
+            icon={isClicked ? "album" : "adjust"}
+            iconColor={isClicked ? "#6563DB" : "darkgrey"}
+            onPress={handleIconClick}
+          />
+          <Text>{i18n.t("termscondition")}</Text>
+        </View>
+        <Button
+          style={styles.button}
+          labelStyle={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}
+          mode="contained"
+          onPress={() => CheckBeforeBackend()}
+          width="80%"
+        >
+          {i18n.t("next")}
+        </Button>
+        <View
+          style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
+        >
+          <Divider style={{ flex: 1, height: 2 }} />
+          <Text style={{ marginHorizontal: 10 }}>or</Text>
+          <Divider style={{ flex: 1, height: 2 }} />
+        </View>
+        <Button
+          style={styles.reducedMarginBtn}
+          labelStyle={{ color: "black", fontWeight: "bold", fontSize: 15 }}
+          mode="outlined"
+          icon="google"
+          onPress={() => NotImplemented()}
+        >
+          {i18n.t("continuegoogle")}{" "}
+        </Button>
+        <Button
+          style={styles.button}
+          labelStyle={{ color: "black", fontWeight: "bold", fontSize: 15 }}
+          mode="outlined"
+          icon="microsoft"
+          onPress={() => NotImplemented()}
+        >
+          {i18n.t("continuemicrosoft")}
+        </Button>
+        <Button
+          style={styles.button}
+          labelStyle={{ color: "black", fontWeight: "bold", fontSize: 15 }}
+          mode="outlined"
+          icon="apple"
+          onPress={() => NotImplemented()}
+        >
+          {i18n.t("continueapple")}{" "}
+        </Button>
+        <Text
+          style={{ marginTop: 25, color: "black" }}
+          onPress={() => navigation.goBack()}
+        >
+          {i18n.t("cancel")}
+        </Text>
+      </ScrollView>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        style={{ backgroundColor: "#D1312A" }}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Icon source="alert-circle-outline" color="#fff" size={24} />
+          <Text style={{ marginLeft: 10, color: "#fff", fontWeight: "bold" }}>
+            {customAlert.message}
+          </Text>
+        </View>
+      </Snackbar>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   focusThis: {
-      display: "flex",
-      flexGrow: 1,
-      backgroundColor: "#fff",
-      width: "100%",
-      height: "100%",
-      padding: 10,
-    },
+    display: "flex",
+    flexGrow: 1,
+    backgroundColor: "#fff",
+    width: "100%",
+    height: "100%",
+    padding: 10,
+  },
   container: {
     display: "flex",
     backgroundColor: "#fff",
@@ -206,16 +237,16 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    flexGrow:1,
+    flexGrow: 1,
   },
   button: {
-    marginTop: 25, 
-    fullWidth: true, 
-    width: '70%',
+    marginTop: 25,
+    fullWidth: true,
+    width: "70%",
   },
   reducedMarginBtn: {
     marginTop: 15,
-    fullWidth: true, 
-    width: '70%',
-  }
+    fullWidth: true,
+    width: "70%",
+  },
 });
