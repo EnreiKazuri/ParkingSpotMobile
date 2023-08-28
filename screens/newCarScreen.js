@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { 
+import { View, StyleSheet, ScrollView } from "react-native";
+import {
   TextInput,
   Text,
   Button,
   Snackbar,
   IconButton,
 } from "react-native-paper";
-import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import axios from 'axios';
+import { Dropdown } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import axios from "axios";
+import * as Localization from "expo-localization";
+import { I18n } from "i18n-js";
+import { translations } from "../localization";
 
-export default function NewCarScreen({navigation}) {
-  const [maker, setMaker] = React.useState('');
-  const [model, setModel] = React.useState('');
-  const [licensePlate, setLicensePlate] = React.useState('');
-  const [selectedColor, setSelectedColor] = useState('black');
+export default function NewCarScreen({ navigation }) {
+  const i18n = new I18n(translations);
+  let [locale, setLocale] = useState(Localization.locale);
+  i18n.defaultLocale = "en";
+  i18n.locale = locale;
+  i18n.enableFallback = true;
+  const [maker, setMaker] = React.useState("");
+  const [model, setModel] = React.useState("");
+  const [licensePlate, setLicensePlate] = React.useState("");
+  const [selectedColor, setSelectedColor] = useState("black");
   const [isFocused, setIsFocused] = React.useState(false);
   const [modelData, setModelData] = React.useState([]);
   const [makerList, setMakerList] = React.useState([]);
@@ -39,7 +47,7 @@ export default function NewCarScreen({navigation}) {
   //   { value: 2, label: 'Blue', color: 'blue'},
   //   { value: 3, label: 'Green', color: 'green'},
   // ];
- 
+
   useEffect(() => {
     GetBrandData();
     GetModelData();
@@ -47,56 +55,61 @@ export default function NewCarScreen({navigation}) {
   }, []);
 
   const GetBrandData = () => {
-    const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://10.111.0.252:3000/brand';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
-    axios.get(axiosUrl, { withCredentials: true })
-    .then(response => {
+    const generalUrl = "http://localhost:3000/user/login";
+    const androidUrl = "http://10.111.0.252:3000/brand";
+    const axiosUrl = Platform.OS === "android" ? androidUrl : generalUrl;
+    axios
+      .get(axiosUrl, { withCredentials: true })
+      .then((response) => {
         console.log(response.data);
-        response.data.body.forEach(maker => {
-          makerList.push({value: maker._id, label: maker.brand});
+        response.data.body.forEach((maker) => {
+          makerList.push({ value: maker._id, label: maker.brand });
         });
-    })
-    .catch(error => {
+      })
+      .catch((error) => {
         console.log(error);
-    } )
+      });
   };
 
   const GetModelData = () => {
-    const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://10.111.0.252:3000/model';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
-    axios.get(axiosUrl, { withCredentials: true })
-    .then(response => {
+    const generalUrl = "http://localhost:3000/user/login";
+    const androidUrl = "http://10.111.0.252:3000/model";
+    const axiosUrl = Platform.OS === "android" ? androidUrl : generalUrl;
+    axios
+      .get(axiosUrl, { withCredentials: true })
+      .then((response) => {
         console.log(response.data);
-        response.data.body.forEach(model => {
-          modelList.push({value: model._id, parentValue: model.brand._id, label: model.model});
+        response.data.body.forEach((model) => {
+          modelList.push({
+            value: model._id,
+            parentValue: model.brand._id,
+            label: model.model,
+          });
         });
-    })
-    .catch(error => {
+      })
+      .catch((error) => {
         console.log(error);
-    } )
+      });
   };
 
   const GetColorData = () => {
-    const generalUrl = 'http://localhost:3000/user/login';
-    const androidUrl = 'http://10.111.0.252:3000/color';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
-    axios.get(axiosUrl, { withCredentials: true })
-    .then(response => {
+    const generalUrl = "http://localhost:3000/user/login";
+    const androidUrl = "http://10.111.0.252:3000/color";
+    const axiosUrl = Platform.OS === "android" ? androidUrl : generalUrl;
+    axios
+      .get(axiosUrl, { withCredentials: true })
+      .then((response) => {
         console.log(response.data);
-        response.data.body.forEach(color => {
-          colorList.push({value: color._id, label: color.color});
+        response.data.body.forEach((color) => {
+          colorList.push({ value: color._id, label: color.color });
         });
-    })
-    .catch(error => {
+      })
+      .catch((error) => {
         console.log(error);
-    } )
+      });
   };
 
-  const SendToBackend = () => {
-  
-  };
+  const SendToBackend = () => { };
 
   const handleModel = (value) => {
     let modelArray = [];
@@ -114,84 +127,91 @@ export default function NewCarScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Car Registration</Text>
+      <Text style={styles.title}>{i18n.t("caregister")}</Text>
       <Dropdown
-          style={[styles.dropdown, isFocused && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          data={makerList}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocused ? 'Select Maker' : '...'}
-          searchPlaceholder="Search..."
-          value={maker}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          onChange={item => {
-            setMaker(item.value);
-            setIsFocused(false);
-            handleModel(item.value);
-          }}
-        />
-        <Dropdown
-          style={[styles.dropdown, isFocused && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          data={modelData}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocused ? 'Select Model' : '...'}
-          searchPlaceholder="Search..."
-          value={model}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          onChange={item => {
-            setModel(item.value);
-            setIsFocused(false);
-          }}
-        />
-        <TextInput
-          style={{width:"95%", marginBottom: 15}}
-          label='License Plate'
-          mode='outlined'
-          value={licensePlate}
-          onChangeText={text => setLicensePlate(text)}
-        />
-        <Dropdown
-          style={[styles.dropdown, isFocused && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          data={colorList}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocused ? 'Vehicle Color' : '...'}
-          value={selectedColor}
-          onChange={item => {
-            setSelectedColor(item.value);
-            setIsFocused(false);
-            handleColor(item.color);
-          }}
-          // renderLeftIcon={() => (
-          //   <AntDesign color={selectedColor.show} name="pluscircle" size={20} style={{marginRight: 10}}/>
-          // )}
-        />
+        style={[styles.dropdown, isFocused && { borderColor: "blue" }]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        data={makerList}
+        search
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={!isFocused ? i18n.t("selectmaker") : "..."}
+        searchPlaceholder={i18n.t("search")}
+        value={maker}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        onChange={(item) => {
+          setMaker(item.value);
+          setIsFocused(false);
+          handleModel(item.value);
+        }}
+      />
+      <Dropdown
+        style={[styles.dropdown, isFocused && { borderColor: "blue" }]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        data={modelData}
+        search
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={!isFocused ? i18n.t("selectmodel") : "..."}
+        searchPlaceholder={i18n.t("search")}
+        value={model}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        onChange={(item) => {
+          setModel(item.value);
+          setIsFocused(false);
+        }}
+      />
+      <TextInput
+        style={{ width: "95%", marginBottom: 15 }}
+        label={i18n.t("licenseplate")}
+        mode="outlined"
+        value={licensePlate}
+        onChangeText={(text) => setLicensePlate(text)}
+      />
+      <Dropdown
+        style={[styles.dropdown, isFocused && { borderColor: "blue" }]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        data={colorList}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={!isFocused ? i18n.t("vehicleColor") : "..."}
+        value={selectedColor}
+        onChange={(item) => {
+          setSelectedColor(item.value);
+          setIsFocused(false);
+          handleColor(item.color);
+        }}
+      // renderLeftIcon={() => (
+      //   <AntDesign color={selectedColor.show} name="pluscircle" size={20} style={{marginRight: 10}}/>
+      // )}
+      />
       <Button
         style={styles.reducedMarginBtn}
-        labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
-        mode='contained'
+        labelStyle={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}
+        mode="contained"
         onPress={() => SendToBackend()}
-        width='80%'>
-        Done
+        width="80%"
+      >
+        {i18n.t("done")}
       </Button>
-      <IconButton icon="arrow-left-bold" iconColor='black' style={{alignSelf: 'flex-start'}} size={30} onPress={() => navigation.goBack()}/>
+      <IconButton
+        icon="arrow-left-bold"
+        iconColor="black"
+        style={{ alignSelf: "flex-start" }}
+        size={30}
+        onPress={() => navigation.goBack()}
+      />
     </View>
   );
 }
@@ -200,34 +220,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexGrow: 1,
-    width: '100%',
+    width: "100%",
     padding: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
   dropdown: {
     height: 50,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
-    width: '95%',
+    width: "95%",
     marginBottom: 15,
   },
   dropdown2: {
     height: 50,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
-    width: '95%',
+    width: "95%",
     marginBottom: 15,
     marginLeft: 10,
   },
   label: {
-    position: 'absolute',
-    backgroundColor: 'white',
+    position: "absolute",
+    backgroundColor: "white",
     left: 22,
     top: 8,
     zIndex: 999,
@@ -246,14 +266,14 @@ const styles = StyleSheet.create({
   },
   reducedMarginBtn: {
     marginBottom: 10,
-    fullWidth: true, 
-    width: '95%',
+    fullWidth: true,
+    width: "95%",
   },
   title: {
     fontSize: 24,
     marginBottom: 16,
-    fontWeight: 'bold',
-    color: '#6563db',
+    fontWeight: "bold",
+    color: "#6563db",
   },
   iconStyle: {
     width: 20,

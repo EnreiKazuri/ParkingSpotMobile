@@ -1,13 +1,21 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import { Divider, List, Text } from 'react-native-paper';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
+import { Divider, List, Text } from "react-native-paper";
+import axios from "axios";
+import * as Localization from "expo-localization";
+import { I18n } from "i18n-js";
+import { translations } from "../../localization";
 
-export default function MainScreen({navigation}) {
-  const [location, setLocation] = React.useState('');
+export default function MainScreen({ navigation }) {
+  const i18n = new I18n(translations);
+  const [location, setLocation] = React.useState("");
   const [isFocused, setIsFocused] = React.useState(false);
   const [locationList, setLocationList] = React.useState([]);
+  let [locale, setLocale] = useState(Localization.locale);
+  i18n.defaultLocale = "en";
+  i18n.locale = locale;
+  i18n.enableFallback = true;
   // const locationList = [
   //   { value: 1, label: 'Instituto Tecnologico de Santo Domingo' },
   //   { value: 2, label: 'Banco Popular' },
@@ -41,46 +49,60 @@ export default function MainScreen({navigation}) {
   }, []);
 
   const GetLocationData = () => {
-    const generalUrl = 'http://localhost:3000/organization/info';
-    const androidUrl = 'http://192.168.43.36:3000/organization/info';
-    const axiosUrl = Platform.OS === 'android' ? androidUrl : generalUrl;
-    axios.get(axiosUrl, { withCredentials: true })
-    .then(response => {
+    const generalUrl = "http://localhost:3000/organization/info";
+    const androidUrl = "http://192.168.43.36:3000/organization/info";
+    const axiosUrl = Platform.OS === "android" ? androidUrl : generalUrl;
+    axios
+      .get(axiosUrl, { withCredentials: true })
+      .then((response) => {
         const newLocationList = [];
         console.log(response.data);
-        response.data.body.forEach(location => {
-          newLocationList.push({value: location._id, label: location.organizationName, coordinates: location.coodernates});
+        response.data.body.forEach((location) => {
+          newLocationList.push({
+            value: location._id,
+            label: location.organizationName,
+            coordinates: location.coodernates,
+          });
         });
         setLocationList(newLocationList);
-    })
-    .catch(error => {
-      console.error(error);
-    })
-  }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const conditionalNavigate = () => {
-    navigation.navigate('Map', location._id);
+    navigation.navigate("Map", location._id);
   };
   const RenderLastSelected = () => {
-    if (lastSelected.length == 0) return (
-      <View>
-        <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 50, color:'gray'}}>
-          No recent reservations
-        </Text>
-      </View>);
+    if (lastSelected.length == 0)
+      return (
+        <View>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "bold",
+              marginTop: 50,
+              color: "gray",
+            }}
+          >
+            {i18n.t("recentreservation")}
+          </Text>
+        </View>
+      );
     else {
       return lastSelected.map((item, index) => (
         <View style={styles.containerRecent}>
           <List.Item
-          key={index}
-          title={item.parkingLot}
-          description={item.label}
-          left={props => <List.Icon {...props} icon="history" />}
-          right={props => <List.Icon {...props} icon="greater-than" />}
-          titleStyle={{fontSize: 16, fontWeight: 'bold'}}
-          style={{flexWrap: 'nowrap'}}
-        />
-        <Divider style={{height: 1, width: "100%" }} bold={false}/>
+            key={index}
+            title={item.parkingLot}
+            description={item.label}
+            left={(props) => <List.Icon {...props} icon="history" />}
+            right={(props) => <List.Icon {...props} icon="greater-than" />}
+            titleStyle={{ fontSize: 16, fontWeight: "bold" }}
+            style={{ flexWrap: "nowrap" }}
+          />
+          <Divider style={{ height: 1, width: "100%" }} bold={false} />
         </View>
       ));
     }
@@ -88,10 +110,26 @@ export default function MainScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={{width: '100%', alignItems: 'center', height: "30%", justifyContent: 'flex-end'}}>
-      <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 16, color:'#6563DB'}}>Reservation</Text>
+      <View
+        style={{
+          width: "100%",
+          alignItems: "center",
+          height: "30%",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            marginBottom: 16,
+            color: "#6563DB",
+          }}
+        >
+          {i18n.t("reservation")}
+        </Text>
         <Dropdown
-          style={[styles.dropdown, isFocused && { borderColor: 'blue' }]}
+          style={[styles.dropdown, isFocused && { borderColor: "blue" }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -100,53 +138,56 @@ export default function MainScreen({navigation}) {
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={!isFocused ? 'Select Location' : '...'}
-          searchPlaceholder="Search..."
+          placeholder={!isFocused ? i18n.t("selectlocation") : "..."}
+          searchPlaceholder={i18n.t("search")}
           value={location}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          onChange={item => {
+          onChange={(item) => {
             setLocation(item.value);
             setIsFocused(false);
             conditionalNavigate();
           }}
         />
       </View>
-        <ScrollView contentContainerStyle={{alignItems: 'center'}} style={{width: '100%', height: '70%'}}>
-          {RenderLastSelected()}
-        </ScrollView>
+      <ScrollView
+        contentContainerStyle={{ alignItems: "center" }}
+        style={{ width: "100%", height: "70%" }}
+      >
+        {RenderLastSelected()}
+      </ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexGrow: 1,
-    width: '100%',
+    width: "100%",
     padding: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
   containerRecent: {
-    width: '95%',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    backgroundColor: '#fff',
+    width: "95%",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    backgroundColor: "#fff",
   },
   dropdown: {
     height: 50,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
-    width: '95%',
+    width: "95%",
     marginBottom: 16,
   },
   label: {
-    position: 'absolute',
-    backgroundColor: 'white',
+    position: "absolute",
+    backgroundColor: "white",
     left: 22,
     top: 8,
     zIndex: 999,

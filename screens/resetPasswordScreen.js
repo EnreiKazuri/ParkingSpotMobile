@@ -2,8 +2,16 @@ import React, { useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 // import { Button, TextInput } from "react-native-paper";
 import { Text, TextInput, Button } from "react-native-paper";
+import * as Localization from "expo-localization";
+import { I18n } from "i18n-js";
+import { translations } from "../localization";
 
 export default function ResetPassword() {
+  const i18n = new I18n(translations);
+  let [locale, setLocale] = useState(Localization.locale);
+  i18n.defaultLocale = "en";
+  i18n.locale = locale;
+  i18n.enableFallback = true;
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -19,25 +27,26 @@ export default function ResetPassword() {
   };
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 24, marginBottom: 20 }}>Reset Password</Text>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>{i18n.t("resetpassword")}</Text>
       <TextInput
         style={styles.button}
-        label='New Password'
-        mode='outlined'
+        label={i18n.t("newPassword")}
+        mode="outlined"
         onChangeText={(password) => setPassword(password)}
       />
       <TextInput
         style={styles.button}
-        label='Confirm Password'
-        mode='outlined'
+        label={i18n.t("confirmpassword")}
+        mode="outlined"
         onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
       />
       <Button
-          style={styles.button}
-          mode='contained'
-          buttonColor="black"
-          onPress={() => handleResetPassword()}>
-          Reset Password
+        style={styles.button}
+        mode="contained"
+        buttonColor="black"
+        onPress={() => handleResetPassword()}
+      >
+        {i18n.t("resetpassword")}
       </Button>
     </View>
   );
@@ -52,8 +61,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   button: {
-    marginTop: 25, 
-    fullWidth: true, 
-    width: '90%',
+    marginTop: 25,
+    fullWidth: true,
+    width: "90%",
   },
 });
