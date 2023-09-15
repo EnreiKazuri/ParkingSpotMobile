@@ -20,6 +20,7 @@ import ResetPassword from "../screens/resetPasswordScreen.js";
 import ProfileScreen from "../screens/mainScreens/profileScreen.js";
 import SettingsScreen from "../screens/mainScreens/settingsScreen.js";
 import EditProfileScreen from "../screens/editProfileScreen.js";
+import MailConfirmationScreen from "../screens/mailConfirmationScreen.js";
 
 const App = () => {
   const router = useRouter();
@@ -44,6 +45,7 @@ const App = () => {
         <Stack.Screen name="ProfileView" component={ProfileScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+        <Stack.Screen name="MailConfirmation" component={MailConfirmationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
