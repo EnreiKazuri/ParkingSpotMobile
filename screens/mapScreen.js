@@ -10,23 +10,27 @@ import MapView, {Marker} from 'react-native-maps'
 import axios from 'axios';
 import {IP_URL} from "@env";
 
-export default function ReserverScreen({ navigation}){
+export default function ReserverScreen({navigation, route}){
     const [licensePlate, setLicensePlate] = useState('');
     const [parkingDuration, setParkingDuration] = useState('');
     const [location, setLocation] = useState('');
     const [markerList, setMarkerList] = useState([]);
-    const locationID = '64b17c3c40102dc7689d776e';
+    const locationSelected = {
+      locationID : route.params.value,
+      latitude: route.params.latitude,
+      longitude: route.params.longitude,
+    };
     
     useEffect(() => {
+      console.log(locationSelected)
       GetMarkers();
     }, []);
 
     const GetMarkers = () => {
-      const axiosUrl = `${IP_URL}/parking-lot?${locationID}`;
+      const axiosUrl = `${IP_URL}parking-lot?${locationSelected.locationID}`;
       axios.get(axiosUrl, { withCredentials: true })
       .then(response => {
           const newMarkerList = [];
-          console.log(response.data);
           response.data.body.forEach(marker => {
             newMarkerList.push({value: marker._id, latitude: marker.latitude, longitude: marker.longitude});
           });
@@ -48,9 +52,9 @@ export default function ReserverScreen({ navigation}){
 
     const printMarkers = () => {
       return markerList.map((item, index) => (
-        <Marker coordinate={{
-          latitude: item.latitude,
-          longitude: item.longitude,}}
+        <Marker key={index} coordinate={{
+          latitude: parseFloat(item.latitude),
+          longitude: parseFloat(item.longitude),}}
         onPress={openLot}/>
       ));}
 
@@ -60,8 +64,8 @@ export default function ReserverScreen({ navigation}){
             <MapView
               style={{ flex: 1 }}
               initialRegion={{
-                latitude: 18.48778,
-                longitude: -69.96327,
+                latitude: parseFloat(locationSelected.latitude),
+                longitude: parseFloat(locationSelected.longitude),
                 latitudeDelta: 0.000922,
                 longitudeDelta: 0.000421,
               }}
