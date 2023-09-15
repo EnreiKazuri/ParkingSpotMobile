@@ -46,6 +46,7 @@ export default function App({navigation}) {
 
   const SendToBackend = () => {
     const axiosUrl = `${IP_URL}user/login`;
+    console.log(axiosUrl)
     const data = {
       email: email.toLowerCase(),
       password: password,
@@ -56,9 +57,9 @@ export default function App({navigation}) {
       console.log(response.data);
       if (response.data.body.success){
         let user = response.data.body.user;
+        console.log("User: ")
+        console.log(user)
         navigation.navigate('Main', user);
-        setCustomAlert({severity: "error", message: "Recibe respuesta"}); 
-        onToggleSnackBar();
        }else{
         setCustomAlert({severity: "error", message: response.data.body.message}); 
         onToggleSnackBar();

@@ -5,7 +5,7 @@ import { Divider, List, Text } from 'react-native-paper';
 import axios from 'axios';
 import {IP_URL} from "@env";
 
-export default function MainScreen({navigation}) {
+export default function MainScreen({route, navigation}) {
   const [location, setLocation] = React.useState('');
   const [isFocused, setIsFocused] = React.useState(false);
   const [locationList, setLocationList] = React.useState([]);
@@ -28,27 +28,24 @@ export default function MainScreen({navigation}) {
   //   { value: 10, parkingLot: "Mundo muy lejano", label: 'Por donde Abel' },
   // ];
 
-  // const user = {
-  //   name: route.params.name,
-  //   lastname: route.params.lastName,
-  //   email: route.params.email,
-  //   phone: route.params.phone,
-  //   password: route.params.password,
-  // };
+  const user = {
+    id: route.params._id,
+  };
 
   useEffect(() => {
     GetLocationData();
-    //GetHistoryData();
+    GetHistoryData();
   }, []);
 
   const GetLocationData = () => {
-    const axiosUrl = `${IP_URL}/organization/info`
+    const axiosUrl = `${IP_URL}organization/info`;
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
         const newLocationList = [];
         console.log(response.data);
         response.data.body.forEach(location => {
-          newLocationList.push({value: location._id, label: location.organizationName, coordinates: location.coodernates});
+          newLocationList.push({value: location._id, label: location.organizationName,
+            latitude: location.latitude, longitude: location.longitude});
         });
         setLocationList(newLocationList);
     })
@@ -57,9 +54,22 @@ export default function MainScreen({navigation}) {
     })
   }
 
-  const conditionalNavigate = () => {
-    navigation.navigate('Map', location._id);
-  };
+  const GetHistoryData = () => {
+    const axiosUrl = `${IP_URL}parking-spot?${user.id}`;
+    axios.get(axiosUrl, { withCredentials: true })
+    .then(response => {
+        const newLastSelected = [];
+        console.log(response.data);
+        response.data.body.forEach(reservation => {
+          newLastSelected.push({value: reservation._id, parkingLot: reservation.parkingLot, label: reservation.organizationName});
+        });
+        setLastSelected(newLastSelected);
+    })
+    .catch(error => {
+      console.error(error);
+    })
+  }
+
   const RenderLastSelected = () => {
     if (lastSelected.length == 0) return (
       <View>
@@ -107,7 +117,7 @@ export default function MainScreen({navigation}) {
           onChange={item => {
             setLocation(item.value);
             setIsFocused(false);
-            conditionalNavigate();
+            navigation.navigate('Map', item);
           }}
         />
       </View>
