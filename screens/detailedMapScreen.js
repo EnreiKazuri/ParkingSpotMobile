@@ -12,10 +12,11 @@ const parkings = [
 ];
 
 const RenderParking = () => {
-  return parkings.map((item, index) => (
+  parkingSorted = parkings.sort((a, b) => b.available - a.available);
+  return parkingSorted.map((item, index) => (
     <View style={{width: '90%', minHeight: 150,alignItems: 'center',
      backgroundColor: item.available ? 'white' : '#e6e1e1', borderRadius: 10, padding: 15,
-     marginBottom: 5, borderColor: 'black', borderWidth: 1}}>
+     marginBottom: 5, borderColor: 'black', borderWidth: 1}} onPress={ReserveParking(item.id)}>
       <Text style={{fontWeight: 'bold', color: 'black', alignSelf: 'flex-start'}}>
         Parking {index + 1}
         </Text>
@@ -28,7 +29,10 @@ const RenderParking = () => {
   ));
 }
 
-export default function DetailedMapScreen() {
+export default function DetailedMapScreen({navigation}) {
+  const ReserveParking = (id) => {
+    navigation.navigate("Reservation", {parkingId: id});
+  }
   return (
     <View style={{alignItems: 'center', backgroundColor: 'white', flex: 1}}>
       <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 50, color:'black'}}>
