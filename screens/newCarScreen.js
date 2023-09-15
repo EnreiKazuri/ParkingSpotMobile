@@ -6,6 +6,7 @@ import {
   Button,
   Snackbar,
   IconButton,
+  List,
 } from "react-native-paper";
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -15,46 +16,34 @@ import {IP_URL} from "@env";
 export default function NewCarScreen({navigation}) {
   const [maker, setMaker] = React.useState('');
   const [model, setModel] = React.useState('');
+  const [year, setYear] = React.useState('');
   const [licensePlate, setLicensePlate] = React.useState('');
-  const [selectedColor, setSelectedColor] = useState('black');
+  const [selectedColor, setSelectedColor] = React.useState('');
   const [isFocused, setIsFocused] = React.useState(false);
   const [modelData, setModelData] = React.useState([]);
   const [makerList, setMakerList] = React.useState([]);
-  // const makerList = [
-  //   { value: 1, label: 'Toyota' },
-  //   { value: 2, label: 'Ford' },
-  //   { value: 3, label: 'Nissan' },
-  // ];
   const [modelList, setModelList] = React.useState([]);
-  // const modelList = [
-  //   { value: 1, label: 'Corolla', parentValue: 1 },
-  //   { value: 2, label: 'Mustang', parentValue: 2 },
-  //   { value: 3, label: 'Camry', parentValue: 1 },
-  //   { value: 3, label: 'Altima', parentValue: 3 },
-  //   { value: 3, label: 'Bronco', parentValue: 2 },
-  //   { value: 3, label: 'Mirai', parentValue: 1 },
-  // ];
   const [colorList, setColorList] = React.useState([]);
-  // const colors = [
-  //   { value: 1, label: 'Red', color: 'red'},
-  //   { value: 2, label: 'Blue', color: 'blue'},
-  //   { value: 3, label: 'Green', color: 'green'},
-  // ];
+  const [yearList, setYearList] = React.useState([]);
  
   useEffect(() => {
+    console.log("Loading")
     GetBrandData();
     GetModelData();
     GetColorData();
+    ListYears();
   }, []);
 
   const GetBrandData = () => {
-    const axiosUrl = `${IP_URL}/brand`
+    const axiosUrl = `${IP_URL}brand`
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
-        console.log(response.data);
+        const newMakerList = [];
+        // console.log(response.data);
         response.data.body.forEach(maker => {
-          makerList.push({value: maker._id, label: maker.brand});
+          newMakerList.push({value: maker._id, label: maker.brand});
         });
+        setMakerList(newMakerList);
     })
     .catch(error => {
         console.log(error);
@@ -62,13 +51,15 @@ export default function NewCarScreen({navigation}) {
   };
 
   const GetModelData = () => {
-    const axiosUrl = `${IP_URL}/model`
+    const axiosUrl = `${IP_URL}model`
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
-        console.log(response.data);
+        const newModelList = [];
+        // console.log(response.data);
         response.data.body.forEach(model => {
-          modelList.push({value: model._id, parentValue: model.brand._id, label: model.model});
+          newModelList.push({value: model._id, parentValue: model.brand._id, label: model.model});
         });
+        setModelList(newModelList);
     })
     .catch(error => {
         console.log(error);
@@ -76,21 +67,40 @@ export default function NewCarScreen({navigation}) {
   };
 
   const GetColorData = () => {
-    const axiosUrl = `${IP_URL}/color`
+    const axiosUrl = `${IP_URL}color`
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
+        const newColorList = [];
         response.data.body.forEach(color => {
-          colorList.push({value: color._id, label: color.color});
+          newColorList.push({value: color._id, label: color.color});
         });
+        setColorList(newColorList);
     })
     .catch(error => {
         console.log(error);
     } )
   };
 
+  const ListYears = () => {
+    const currentYear = new Date().getFullYear();
+    const yearArray = [];
+    for (let i = currentYear; i >= 1985; i++) {
+      yearArray.push({value: i.toString(), label: i.toString()});
+    }
+    setYearList(yearArray);
+  };
+
   const SendToBackend = () => {
-  
+      const newCar = {
+        brand: maker,
+        model: model,
+        licensePlate: licensePlate,
+        color: selectedColor,
+        year: year,
+      };
+      console.log(newCar);
+
   };
 
   const handleModel = (value) => {
@@ -101,10 +111,6 @@ export default function NewCarScreen({navigation}) {
       }
     }
     setModelData(modelArray);
-  };
-
-  const handleColor = (value) => {
-    setSelectedColor(value);
   };
 
   return (
@@ -172,11 +178,27 @@ export default function NewCarScreen({navigation}) {
           onChange={item => {
             setSelectedColor(item.value);
             setIsFocused(false);
-            handleColor(item.color);
           }}
-          // renderLeftIcon={() => (
-          //   <AntDesign color={selectedColor.show} name="pluscircle" size={20} style={{marginRight: 10}}/>
-          // )}
+        />
+        <Dropdown
+          style={[styles.dropdown, isFocused && { borderColor: 'blue' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          data={yearList}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocused ? 'Year' : '...'}
+          searchPlaceholder="Search..."
+          value={year}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          onChange={item => {
+            setYear(item.value);
+            setIsFocused(false);
+          }}
         />
       <Button
         style={styles.reducedMarginBtn}
