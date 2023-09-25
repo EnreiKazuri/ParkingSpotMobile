@@ -41,7 +41,7 @@ export default function MainScreen({navigation}){
                 buttonColor='darkred'
                 icon='window-close'
                 mode='contained'
-                onPress={() => navigation.navigate('SignDetail')}>
+                onPress={() => navigation.navigate('SignDetail',{name: "DebugTest", email: "Debug@debug.com", id: "5"})}>
                 Sign Details
             </Button>
             <Button
