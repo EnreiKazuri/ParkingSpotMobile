@@ -16,6 +16,9 @@ export default function MainContainer({route, navigation}){
         id: route.params._id,
         email: route.params.email,
         password: route.params.password,
+        name: "Juan",
+        lastname: "Perez",
+        phone: "1234567890"
     };
 
 
@@ -43,7 +46,7 @@ export default function MainContainer({route, navigation}){
             <Tab.Screen name="Agenda" component={AgendaScreen} options={{tabBarIcon: 'view-agenda'}}
             initialParams={{name: user.name}}/>
             <Tab.Screen name="Profile" component={ProfileScreen} options={{tabBarIcon: 'account'}}
-            initialParams={{name: user.name, lastName: user.lastname, email: user.email, phone: user.phone, password: user.password}}/>
+            initialParams={{name: user.name, lastName: user.lastname, email: user.email, phone: user.phone, password: user.password, id: user.id}}/>
             </Tab.Navigator>
         </View>
     );

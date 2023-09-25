@@ -12,6 +12,7 @@ export default function ProfileScreen({route, navigation}) {
   const onDismissSnackBar = () => setVisible(false);
   
   const user = {
+    id: route.params.id,
     name: route.params.name,
     lastname: route.params.lastName,
     email: route.params.email,
@@ -45,7 +46,7 @@ export default function ProfileScreen({route, navigation}) {
         left={props => <List.Icon {...props} icon="car" />}
         titleStyle={{fontSize: 16}}
         style={{flexWrap: 'nowrap'}}
-        onPress={() => navigation.navigate('CarList')}
+        onPress={() => navigation.navigate('CarList', user.id)}
       />
       <Divider style={{height: 1, width: "100%" }} bold={false}/>
       <List.Item
