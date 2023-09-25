@@ -68,17 +68,17 @@ export default function App({navigation}) {
     setCustomAlert({message: "Not implemented, oops D:"}); onToggleSnackBar();
   }
   const SendToBackend = () => {
-    const axiosUrl = `${IP_URL}/user/`    
+    const axiosUrl = `${IP_URL}user`  
+    console.log(axiosUrl);  
     const data = {
       email: email.toLowerCase(),
       password: password,
-      rol: rol.toLowerCase(),
     };
       axios.post(axiosUrl, data,  { withCredentials: true })
       .then(response => {
         // Handle the response data
         console.log(response.data);
-        response.data.error == "" ? navigation.navigate('SignDetail', {name: data.rol, email: data.email, password: data.password}) : setCustomAlert({message: response.data.body.message}); onToggleSnackBar(); 
+        response.data.error == "" ? navigation.navigate('SignDetail', {name: rol, email: data.email, id: response.data.body._id}) : setCustomAlert({message: response.data.body.message}); onToggleSnackBar(); 
       })
       .catch(error => {
         // Handle any error that occurs during the request
