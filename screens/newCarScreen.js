@@ -9,11 +9,11 @@ import {
   List,
 } from "react-native-paper";
 import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 import {IP_URL} from "@env";
 
-export default function NewCarScreen({navigation}) {
+export default function NewCarScreen({route, navigation}) {
+  const userID = route.params;
   const [maker, setMaker] = React.useState('');
   const [model, setModel] = React.useState('');
   const [year, setYear] = React.useState('');
@@ -27,7 +27,6 @@ export default function NewCarScreen({navigation}) {
   const [yearList, setYearList] = React.useState([]);
  
   useEffect(() => {
-    console.log("Loading")
     GetBrandData();
     GetModelData();
     GetColorData();
@@ -36,10 +35,11 @@ export default function NewCarScreen({navigation}) {
 
   const GetBrandData = () => {
     const axiosUrl = `${IP_URL}brand`
+    console.log(axiosUrl)
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
         const newMakerList = [];
-        // console.log(response.data);
+        //console.log(response.data);
         response.data.body.forEach(maker => {
           newMakerList.push({value: maker._id, label: maker.brand});
         });
@@ -55,7 +55,7 @@ export default function NewCarScreen({navigation}) {
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
         const newModelList = [];
-        // console.log(response.data);
+        //console.log(response.data);
         response.data.body.forEach(model => {
           newModelList.push({value: model._id, parentValue: model.brand._id, label: model.model});
         });
@@ -70,7 +70,7 @@ export default function NewCarScreen({navigation}) {
     const axiosUrl = `${IP_URL}color`
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
-        // console.log(response.data);
+        //console.log(response.data);
         const newColorList = [];
         response.data.body.forEach(color => {
           newColorList.push({value: color._id, label: color.color});
@@ -84,22 +84,33 @@ export default function NewCarScreen({navigation}) {
 
   const ListYears = () => {
     const currentYear = new Date().getFullYear();
+    console.log(currentYear)
     const yearArray = [];
-    for (let i = currentYear; i >= 1985; i++) {
+    for (let i = 1985; i <= currentYear; i++) {
       yearArray.push({value: i.toString(), label: i.toString()});
     }
+    yearArray.reverse();
     setYearList(yearArray);
   };
 
   const SendToBackend = () => {
       const newCar = {
-        brand: maker,
+        owner: userID,
         model: model,
-        licensePlate: licensePlate,
+        plate: licensePlate,
         color: selectedColor,
         year: year,
       };
-      console.log(newCar);
+      axiosUrl = `${IP_URL}vehicle`;
+      axios.post(axiosUrl, newCar, { withCredentials: true })
+      .then(response => {
+        // Handle the response data
+        console.log(response.data);
+        navigation.goBack();
+      })
+      .catch(error => {
+        console.error(error);
+      })
 
   };
 
