@@ -13,7 +13,7 @@ import axios from 'axios';
 import {IP_URL} from "@env";
 
 export default function NewCarScreen({route, navigation}) {
-  const userID = route.params;
+  const userID = route.params.id;
   const [maker, setMaker] = React.useState('');
   const [model, setModel] = React.useState('');
   const [year, setYear] = React.useState('');
