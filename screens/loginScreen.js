@@ -46,7 +46,7 @@ export default function App({navigation}) {
 
   const SendToBackend = () => {
     const axiosUrl = `${IP_URL}user/login`;
-    console.log(axiosUrl)
+    //console.log(axiosUrl)
     const data = {
       email: email.toLowerCase(),
       password: password,
@@ -54,12 +54,11 @@ export default function App({navigation}) {
     axios.post(axiosUrl, data,  { withCredentials: true })
     .then(response => {
       // Handle the response data
-      console.log(response.data);
+      //console.log(response.data);
       if (response.data.body.success){
         let user = response.data.body.user;
-        console.log("User: ")
-        console.log(user)
-        navigation.navigate('Main', user);
+        console.log(user);
+        navigation.navigate('Main', {id: user._id});
        }else{
         setCustomAlert({severity: "error", message: response.data.body.message}); 
         onToggleSnackBar();
