@@ -9,30 +9,13 @@ export default function MainScreen({route, navigation}) {
   const [location, setLocation] = React.useState('');
   const [isFocused, setIsFocused] = React.useState(false);
   const [locationList, setLocationList] = React.useState([]);
-  // const locationList = [
-  //   { value: 1, label: 'Instituto Tecnologico de Santo Domingo' },
-  //   { value: 2, label: 'Banco Popular' },
-  //   { value: 3, label: 'La casa de Pablo' },
-  // ];
   const [lastSelected, setLastSelected] = React.useState([]);
-  // const lastSelected = [
-  //   { value: 1, parkingLot: "El Sotano", label: 'Instituto Tecnologico de Santo Domingo'},
-  //   { value: 2, parkingLot: "Parqueo Reservado", label: 'Banco Popular' },
-  //   { value: 3, parkingLot: "Personal Asignado", label: 'La casa de Pablo' },
-  //   { value: 4, parkingLot: "El Desierto", label: 'Instituto Tecnologico de Santo Domingo'},
-  //   { value: 5, parkingLot: "Parqueo de profesores", label: 'Instituto Tecnologico de Santo Domingo' },
-  //   { value: 6, parkingLot: "Parqueo de Invitados", label: 'La casa de Pablo' },
-  //   { value: 7, parkingLot: "El Sotano", label: 'Instituto Tecnologico de Santo Domingo'},
-  //   { value: 8, parkingLot: "Parqueo Reservado", label: 'Banco Popular' },
-  //   { value: 9, parkingLot: "Personal Asignado", label: 'La casa de Pablo' },
-  //   { value: 10, parkingLot: "Mundo muy lejano", label: 'Por donde Abel' },
-  // ];
-
   const user = {
-    id: route.params._id,
+    id: route.params.id,
   };
 
   useEffect(() => {
+    console.log(user.id);
     GetLocationData();
     GetHistoryData();
   }, []);
@@ -42,7 +25,7 @@ export default function MainScreen({route, navigation}) {
     axios.get(axiosUrl, { withCredentials: true })
     .then(response => {
         const newLocationList = [];
-        console.log(response.data);
+        //console.log(response.data);
         response.data.body.forEach(location => {
           newLocationList.push({value: location._id, label: location.organizationName,
             latitude: location.latitude, longitude: location.longitude});
@@ -60,6 +43,7 @@ export default function MainScreen({route, navigation}) {
     .then(response => {
         const newLastSelected = [];
         console.log(response.data);
+        if (response.data.body == undefined) return;
         response.data.body.forEach(reservation => {
           newLastSelected.push({value: reservation._id, parkingLot: reservation.parkingLot, label: reservation.organizationName});
         });
