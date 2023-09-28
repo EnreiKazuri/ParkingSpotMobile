@@ -22,8 +22,9 @@ export default function CarListScreen({route, navigation}) {
     .then(response => {
       const newCarList = [];
       console.log(response.data);
+      if (response.data.body == undefined) return;
       response.data.body.forEach(car => {
-        newCarList.push({value: car._id, licensePlate: car.plate, maker: car.name, model: car.model, color: car.color});
+        newCarList.push({value: car._id, licensePlate: car.plate, maker: car.model.brand.brand, model: car.model.model, color: car.color.color});
       })
       setCarList(newCarList);
     })
@@ -68,7 +69,7 @@ export default function CarListScreen({route, navigation}) {
         <FAB
           icon="car-cog"
           style={styles.fab}
-          onPress={() => navigation.navigate('NewCar', userID)}
+          onPress={() => navigation.navigate('NewCar', {id: userID})}
           size='large'
         />
       </View>
