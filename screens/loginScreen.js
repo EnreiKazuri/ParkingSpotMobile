@@ -79,6 +79,7 @@ export default function App({navigation}) {
         style={styles.reducedMarginBtn}
         label='Email'
         mode='outlined'
+        keyboardType='email-address'
         onChangeText={(email) => setEmail(email)}
         />
       <TextInput
