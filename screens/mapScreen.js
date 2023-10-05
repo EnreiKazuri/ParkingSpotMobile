@@ -11,9 +11,9 @@ import axios from 'axios';
 import {IP_URL} from "@env";
 
 export default function ReserverScreen({navigation, route}){
-    const [licensePlate, setLicensePlate] = useState('');
-    const [parkingDuration, setParkingDuration] = useState('');
-    const [location, setLocation] = useState('');
+    // const [licensePlate, setLicensePlate] = React.useState('');
+    // const [parkingDuration, setParkingDuration] = React.useState('');
+    const [location, setLocation] = React.useState('');
     const [markerList, setMarkerList] = useState([]);
     const locationSelected = {
       locationID : route.params.value,
@@ -41,13 +41,14 @@ export default function ReserverScreen({navigation, route}){
         console.error(error);
       })
     }
+
     const handleMapPress = (event)=>{
-        const{coordinate} = event.nativeEvent;
-        setLocation(coordinate);
+      const{coordinate} = event.nativeEvent;
+      setLocation(coordinate);
     };
 
-    const openLot = () => {
-      navigation.navigate("DetailedMap");
+    const openLot = (lotId) => {
+      navigation.navigate("DetailedMap", {lotId: lotId});
     };
 
     const printMarkers = () => {
@@ -55,7 +56,8 @@ export default function ReserverScreen({navigation, route}){
         <Marker key={index} coordinate={{
           latitude: parseFloat(item.latitude),
           longitude: parseFloat(item.longitude),}}
-        onPress={openLot}/>
+          onPress={() => openLot(item.value)}
+        />
       ));}
 
     return (
