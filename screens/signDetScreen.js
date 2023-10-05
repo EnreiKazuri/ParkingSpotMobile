@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 import axios from 'axios';
 import {IP_URL} from "@env";
+import { MaskedTextInput } from 'react-native-mask-text';
 
 export default function SignDetailScreen({route, navigation}) {
   let name = route.params.name;
@@ -57,10 +58,11 @@ export default function SignDetailScreen({route, navigation}) {
         label='Phone Number'
         mode='outlined'
         keyboardType='phone-pad'
-        // render={props => 
-        // <TextInputMask
-        //   {...props}
-        //   mask="+[00] [000] [000] [000]"/>}
+        render={props =>
+          <MaskedTextInput
+            {...props}
+            mask="(999) 999-9999"
+          />}
         onChangeText={(phone) => setPhone(phone)}
       />
       <Button

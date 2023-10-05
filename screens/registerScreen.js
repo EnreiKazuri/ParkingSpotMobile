@@ -110,7 +110,7 @@ export default function App({navigation}) {
             </Text>
             <TextInput
               style={styles.reducedMarginBtn}
-              label='Name'
+              label='First Name'
               mode='outlined'
               onChangeText={(rol) => setRol(rol)}
             />

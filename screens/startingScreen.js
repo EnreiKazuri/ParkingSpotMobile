@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: 'white',
   },
   image: {
     marginBottom: 40,
