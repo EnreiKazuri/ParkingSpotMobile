@@ -101,7 +101,7 @@ export default function MainScreen({route, navigation}) {
           onChange={item => {
             setLocation(item.value);
             setIsFocused(false);
-            navigation.navigate('Map', item);
+            navigation.navigate('Map', {location: item, userID: user.id});
           }}
         />
       </View>

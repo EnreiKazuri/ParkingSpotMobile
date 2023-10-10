@@ -15,10 +15,11 @@ export default function ReserverScreen({navigation, route}){
     // const [parkingDuration, setParkingDuration] = React.useState('');
     const [location, setLocation] = React.useState('');
     const [markerList, setMarkerList] = useState([]);
+    const userID = route.params.userID;
     const locationSelected = {
-      locationID : route.params.value,
-      latitude: route.params.latitude,
-      longitude: route.params.longitude,
+      locationID : route.params.location.value,
+      latitude: route.params.location.latitude,
+      longitude: route.params.location.longitude,
     };
     
     useEffect(() => {
@@ -48,7 +49,7 @@ export default function ReserverScreen({navigation, route}){
     };
 
     const openLot = (lotId) => {
-      navigation.navigate("DetailedMap", {lotId: lotId});
+      navigation.navigate("DetailedMap", {lotId: lotId, userID: userID});
     };
 
     const printMarkers = () => {
