@@ -18,11 +18,13 @@ export default function ProfileScreen({route, navigation}) {
     const [name, setName] = React.useState('');
     const [lastname, setLastname] = React.useState('');
     const [phone, setPhone] = React.useState('');
+    const [userDriverID, setUserDriverID] = React.useState('');
 
 
     useEffect(() => {
         GetUserData();
         getUserDriverData();
+        console.log("This current name is: " + name);
     }, []);
 
     const GetUserData = () => {
@@ -48,6 +50,7 @@ export default function ProfileScreen({route, navigation}) {
         .then(response => {
             console.log(response.data);
             response.data.body.forEach(user => {
+                setUserDriverID(user._id);
                 setName(user.firstName);
                 setLastname(user.lastName);
                 setPhone(user.phone);
@@ -59,14 +62,16 @@ export default function ProfileScreen({route, navigation}) {
     }
   //#endregion
 
-  // const user = {
-  //   id: route.params.id,
-  //   name: route.params.name,
-  //   lastname: route.params.lastName,
-  //   email: route.params.email,
-  //   phone: route.params.phone,
-  //   password: route.params.password,
-  // };
+  const editProfile = () => {
+    const currentUser = {
+      id: id,
+      userDriverID: userDriverID,
+      name: name,
+      lastname: lastname,
+      phone: phone,
+    }
+    navigation.navigate('EditProfile', {user: currentUser});
+  }
 
   return (
     <View style={styles.container}>
@@ -78,7 +83,7 @@ export default function ProfileScreen({route, navigation}) {
         style={styles.button}
         labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
         mode='contained'
-        onPress={() => navigation.navigate('EditProfile', user)}
+        onPress={() => {editProfile()}}
         width='80%'>
         Edit Profile
       </Button>
