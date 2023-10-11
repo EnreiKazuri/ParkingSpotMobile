@@ -1,21 +1,35 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, IconButton, TextInput, Text } from 'react-native-paper';
+import {IP_URL} from "@env";
+import axios from 'axios';
+import { MaskedTextInput } from 'react-native-mask-text';
 
 export default function DetailedMapScreen({ route, navigation }) {
-    const [name, setName] = React.useState('');
-    const [lastname, setLastname] = React.useState('');
-    const [phone, setPhone] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [visible, setVisible] = React.useState(true);
+    const id = route.params.user.id;
+    const userDriverID = route.params.user.userDriverID;
+    const [name, setName] = React.useState(route.params.user.name);
+    const [lastName, setLastname] = React.useState(route.params.user.lastname);
+    const [phone, setPhone] = React.useState(route.params.user.phone);
 
-    const togglePassword = () => setVisible(!visible);
-    const result = route.params;
-    const user = {
-        name: result.name,
-        lastname: result.lastname,
-        phone: result.phone,
-        password: result.password,
+    const updateProfile = () => {
+      const userDriver = {
+        firstName: name,
+        lastName: lastName,
+        phone: phone,
+      }
+      console.log(userDriver);
+      axiosUrl = `${IP_URL}user-driver/${userDriverID}`;
+      console.log(axiosUrl);
+      axios.put(axiosUrl, userDriver, { withCredentials: true })
+      .then(response => {
+        console.log(response.data);
+        alert('Profile updated successfully! Changes will be reflected on next login.');
+        navigation.navigate('Profile', {id: id});
+      })
+      .catch(error => {
+        console.error(error);
+      })
     }
 
   return (
@@ -27,15 +41,15 @@ export default function DetailedMapScreen({ route, navigation }) {
             mode='outlined'
             onChangeText={(name) => setName(name)}
             left={<TextInput.Icon icon="notebook" />}
-            defaultValue={user.name}
+            defaultValue={name}
         />
         <TextInput
             style={styles.reducedMarginBtn}
             label='Last Name'
             mode='outlined'
-            onChangeText={(lastname) => setLastname(lastname)}
+            onChangeText={(lastName) => setLastname(lastName)}
             left={<TextInput.Icon icon="notebook" />}
-            defaultValue={user.lastname}
+            defaultValue={lastName}
         />
         <TextInput
             style={styles.reducedMarginBtn}
@@ -43,23 +57,19 @@ export default function DetailedMapScreen({ route, navigation }) {
             mode='outlined'
             onChangeText={(phone) => setPhone(phone)}
             left={<TextInput.Icon icon="phone" />}
-            defaultValue={user.phone}
-        />
-        <TextInput
-            style={styles.reducedMarginBtn}
-            label='Password'
-            mode='outlined'
-            secureTextEntry = {visible}
-            onChangeText={(password) => setPassword(password)}
-            left={<TextInput.Icon icon="lock" />}
-            right={<TextInput.Icon icon="eye" onPress={() => togglePassword()}/>}
-            defaultValue={user.password}
+            defaultValue={phone}
+            render={props =>
+              <MaskedTextInput
+                {...props}
+                mask="(999) 999-9999"
+              />}
         />
         <Button
             style={styles.reducedMarginBtn}
             labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
             mode='contained'
-            width='95%'>
+            width='95%'
+            onPress={() => updateProfile()}>
             Update Profile
         </Button>
         <IconButton icon="arrow-left-bold" iconColor='#6563DB' style={{alignSelf:'flex-start'}} size={50} onPress={() => navigation.goBack()}/>
