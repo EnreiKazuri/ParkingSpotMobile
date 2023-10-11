@@ -6,20 +6,28 @@ import {
   Alert,
 } from "react-native";
 import { Text, TextInput, Button } from "react-native-paper";
+import { IP_URL } from "@env";
+import axios from "axios";
 // import { Button, TextInput } from "react-native-paper";
 
-export default function ForgotPassword() {
+export default function ForgotPassword({navigation}) {
   const [email, setEmail] = useState("");
 
   const handleResetPassword = () => {
-    //TODO: Perfom password reset logic here.
-
-    //TODO: PlaceHolder logic to show the reset password result
-    const resetPasswordSuccesful = email == "diego";
-    if (resetPasswordSuccesful) {
-      Alert.alert("Password Reset successful");
+    if (email === "") {
+      Alert.alert("Error", "Please enter your email address");
     } else {
-      Alert.alert("Password Reset Failed", "Invalid email address");
+      axiosUrl = `${IP_URL}user/forgot-password`;
+      console.log(axiosUrl);
+      axios.put(axiosUrl, email,{ withCredentials: true })
+      .then(response => {
+        console.log(response.data);
+        alert('Password reset email sent successfully!');
+        navigation.navigate('ResetPassword');
+      })
+      .catch(error => {
+        console.error(error);
+      })
     }
   };
 
