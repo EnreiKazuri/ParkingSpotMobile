@@ -24,7 +24,7 @@ export default function DetailedMapScreen({ route, navigation }) {
       axios.put(axiosUrl, userDriver, { withCredentials: true })
       .then(response => {
         console.log(response.data);
-        alert('Profile updated successfully! Changes will be reflected on next login.');
+        alert('Profile updated successfully!');
         navigation.navigate('Profile', {id: id});
       })
       .catch(error => {

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
-import { List, Divider, Text, Button, Snackbar } from 'react-native-paper';
+import { List, Divider, Text, Button, Snackbar, Portal, Modal, TextInput, PaperProvider } from 'react-native-paper';
 import Icon from 'react-native-paper/src/components/Icon';
 import {IP_URL} from "@env";
 import axios from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ProfileScreen({route, navigation}) {
   const [avatar, setAvatar] = useState("");
@@ -19,13 +20,22 @@ export default function ProfileScreen({route, navigation}) {
     const [lastname, setLastname] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [userDriverID, setUserDriverID] = React.useState('');
+    const [activated, setActivated] = React.useState(false);
+    const [code, setCode] = React.useState('');
+    const [visibleModal, setVisibleModal] = React.useState(false);
+    const [activatedButton, setActivatedButton] = React.useState(false);
 
-
-    useEffect(() => {
+    // recreate useEffect using useFocusEffect
+    useFocusEffect(
+      React.useCallback(() => {
         GetUserData();
         getUserDriverData();
-        console.log("This current name is: " + name);
-    }, []);
+      }, [])
+    );
+
+    const toggleModal = () => {
+      setVisibleModal(!visibleModal);
+    }
 
     const GetUserData = () => {
         const axiosUrl = `${IP_URL}user/${id}`;
@@ -36,6 +46,10 @@ export default function ProfileScreen({route, navigation}) {
             response.data.body.forEach(user => {
                 setEmail(user.email);
                 setPassword(user.password);
+                setActivated(user.active);
+                if (user.active == true) {
+                  setActivatedButton(true);
+                }
             })
         })
         .catch(error => {
@@ -60,6 +74,23 @@ export default function ProfileScreen({route, navigation}) {
             console.error(error);
         })
     }
+
+    const ActivateUser = () => {
+      const axiosUrl = `${IP_URL}user/activate`;
+      const data = {
+        userId: id,
+        token: code,
+      }
+      console.log(data);
+      axios.put(axiosUrl, data, { withCredentials: true })
+      .then(response => {
+          console.log(response.data);
+          alert("Account activated successfully!");
+      })
+      .catch(error => {
+        console.error(error);
+      })
+    }
   //#endregion
 
   const editProfile = () => {
@@ -74,7 +105,8 @@ export default function ProfileScreen({route, navigation}) {
   }
 
   return (
-    <View style={styles.container}>
+    <PaperProvider>
+      <View style={styles.container}>
       {/* <Image source={{ uri: avatar }} style={styles.avatar} /> */}
       <Icon source="account-circle" color="black" size={70} />
       <Text style={styles.name}>{name + " " + lastname}</Text>
@@ -86,6 +118,16 @@ export default function ProfileScreen({route, navigation}) {
         onPress={() => {editProfile()}}
         width='80%'>
         Edit Profile
+      </Button>
+      <Button
+        disabled={activatedButton}
+        style={{marginTop: 10, marginBottom: 10}}
+        buttonColor='red'
+        labelStyle={{color: '#fff', fontWeight: 'bold', fontSize: 15}}
+        mode='contained'
+        onPress={() => {toggleModal()}}
+        width='80%'>
+        {activatedButton ? "Account Activated" : "Activate Account"}
       </Button>
       <View style={styles.separator} />
       <Text style={styles.sectionTitle}>Contact</Text>
@@ -121,6 +163,31 @@ export default function ProfileScreen({route, navigation}) {
       />
       <Divider style={{height: 1, width: "100%" }} bold={false}/>
       </View>
+      <Portal>
+        <Modal visible={visibleModal} onDismiss={() => {toggleModal()}} contentContainerStyle={{backgroundColor: 'white', padding: 30, alignItems: 'center'}}>
+          <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 15, alignSelf:'flex-start', color: 'gray'}}>
+            Activation code
+          </Text>
+          <TextInput
+            label="Code"
+            value={code}
+            onChangeText={code => setCode(code)}
+            mode='outlined'
+            style={{marginTop: 25, marginBottom: 35, width: '50%'}}
+          />
+          <View style={{flexDirection: 'row',}}>
+            <Text style={{flex: 1, color: '#6563DB', fontWeight: 'bold'}}
+              onPress={() => toggleModal()}>
+              CANCEL
+            </Text>
+            <View style={{flex: 1, alignItems: 'center'}}/>
+            <Text style={{flex: 1, color: '#6563DB', fontWeight: 'bold'}}
+              onPress={() => ActivateUser()}>
+              CONFIRM
+            </Text>   
+          </View>
+        </Modal>
+      </Portal>
       <Snackbar 
         visible={visible}
         onDismiss={onDismissSnackBar}
@@ -131,6 +198,7 @@ export default function ProfileScreen({route, navigation}) {
         </View>
       </Snackbar>
     </View>
+    </PaperProvider>
   );
 }
 
