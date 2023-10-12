@@ -4,21 +4,50 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Divider, List, Text } from 'react-native-paper';
 import axios from 'axios';
 import {IP_URL} from "@env";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function MainScreen({route, navigation}) {
   const [location, setLocation] = React.useState('');
   const [isFocused, setIsFocused] = React.useState(false);
   const [locationList, setLocationList] = React.useState([]);
   const [lastSelected, setLastSelected] = React.useState([]);
+  const [carList, setCarList] = React.useState([]);
   const user = {
     id: route.params.id,
   };
 
-  useEffect(() => {
-    console.log(user.id);
-    GetLocationData();
-    GetHistoryData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("MainScreen focused");
+      console.log(user.id);
+      CheckifCarExists();
+      GetLocationData();
+      GetHistoryData();
+    }, [])
+  );
+
+  const CheckifCarExists = () => {
+    console.log("Checking if car exists");
+    const axiosUrl = `${IP_URL}vehicle/byUser/${user.id}`;
+    axios.get(axiosUrl, { withCredentials: true })
+    .then(response => {
+      console.log(response.data);
+      const newCarList = [];
+      if (response.data.body.length == 0){
+        console.log("No car found");
+        navigation.navigate('NewCar', {id: user.id});
+      }
+      else {
+        response.data.body.forEach(car => {
+          newCarList.push({value: car._id, licensePlate: car.plate, maker: car.model.brand.brand, model: car.model.model, color: car.color.color});
+        })
+        setCarList(newCarList);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    })
+  }
 
   const GetLocationData = () => {
     const axiosUrl = `${IP_URL}organization/info`;
@@ -101,7 +130,7 @@ export default function MainScreen({route, navigation}) {
           onChange={item => {
             setLocation(item.value);
             setIsFocused(false);
-            navigation.navigate('Map', {location: item, userID: user.id});
+            navigation.navigate('Map', {location: item, userID: user.id, carList: carList});
           }}
         />
       </View>

@@ -15,8 +15,10 @@ export default function ReserverScreen({navigation, route}){
     // const [parkingDuration, setParkingDuration] = React.useState('');
     const [location, setLocation] = React.useState('');
     const [markerList, setMarkerList] = useState([]);
+    const carList = route.params.carList;
     const userID = route.params.userID;
     const locationSelected = {
+      name: route.params.location.label,
       locationID : route.params.location.value,
       latitude: route.params.location.latitude,
       longitude: route.params.location.longitude,
@@ -33,7 +35,7 @@ export default function ReserverScreen({navigation, route}){
       .then(response => {
           const newMarkerList = [];
           response.data.body.forEach(marker => {
-            newMarkerList.push({value: marker._id, latitude: marker.latitude, longitude: marker.longitude});
+            newMarkerList.push({value: marker._id, latitude: marker.latitude, longitude: marker.longitude, name: marker.name});
           });
           setMarkerList(newMarkerList);
       }
@@ -48,8 +50,8 @@ export default function ReserverScreen({navigation, route}){
       setLocation(coordinate);
     };
 
-    const openLot = (lotId) => {
-      navigation.navigate("DetailedMap", {lotId: lotId, userID: userID});
+    const openLot = (lotId, lotName) => {
+      navigation.navigate("DetailedMap", {lotId: lotId, userID: userID, orgName: locationSelected.name, lotName: lotName, carList: carList});
     };
 
     const printMarkers = () => {
@@ -57,7 +59,7 @@ export default function ReserverScreen({navigation, route}){
         <Marker key={index} coordinate={{
           latitude: parseFloat(item.latitude),
           longitude: parseFloat(item.longitude),}}
-          onPress={() => openLot(item.value)}
+          onPress={() => openLot(item.value, item.name)}
         />
       ));}
 
@@ -69,9 +71,10 @@ export default function ReserverScreen({navigation, route}){
               initialRegion={{
                 latitude: parseFloat(locationSelected.latitude),
                 longitude: parseFloat(locationSelected.longitude),
-                latitudeDelta: 0.000922,
-                longitudeDelta: 0.000421,
+                latitudeDelta: 0.00922,
+                longitudeDelta: 0.00421,
               }}
+              camera={pitch=45}
               onPress={handleMapPress}
             >
               {printMarkers()}

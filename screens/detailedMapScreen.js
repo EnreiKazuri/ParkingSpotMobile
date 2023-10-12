@@ -4,10 +4,14 @@ import { Divider, List, Text, Modal, Portal, PaperProvider } from 'react-native-
 import axios from 'axios';
 import {IP_URL} from "@env";
 import { TimePickerModal} from 'react-native-paper-dates';
+import { Dropdown } from 'react-native-element-dropdown';
 
 export default function DetailedMapScreen({route, navigation}) {
   const lotID = route.params.lotId;
   const userID = route.params.userID;
+  const orgName = route.params.orgName;
+  const lotName = route.params.lotName;
+  const carList = route.params.carList;
   const [parkingList, setParkingList] = useState([]);
   const [visible, setVisible] = React.useState(false);
   const [vis_dateIn, setVis_dateIn] = React.useState(false);
@@ -15,20 +19,23 @@ export default function DetailedMapScreen({route, navigation}) {
   const [dateIn, setDateIn] = React.useState(new Date());
   const [dateOut, setDateOut] = React.useState(new Date());
   const [parkingId, setParkingId] = React.useState('');
+  const [selectedCar, setSelectedCar] = React.useState('');
+  const [isFocused, setIsFocused] = React.useState(false);
 
-  onDismissIn = React.useCallback(() => {
+  const onDismissIn = React.useCallback(() => {
     setVis_dateIn(false);
   }, [setVis_dateIn]);
 
-  onDismissOut = React.useCallback(() => {
+  const onDismissOut = React.useCallback(() => {
     setVis_dateOut(false);
   }, [setVis_dateOut]);
 
-  onConfirmIn = React.useCallback(
+  const onConfirmIn = React.useCallback(
     ({ hours, minutes }) => {
       let tempDate = dateIn;
       tempDate.setHours(hours);
       tempDate.setMinutes(minutes);
+      tempDate.setSeconds(0,0);
       setDateIn(tempDate);
       setVis_dateIn(false);
       console.log(dateIn);
@@ -36,11 +43,12 @@ export default function DetailedMapScreen({route, navigation}) {
     [setVis_dateIn]
   );
 
-  onConfirmOut = React.useCallback(
+  const onConfirmOut = React.useCallback(
     ({ hours, minutes }) => {
       let tempDate = dateOut;
       tempDate.setHours(hours);
       tempDate.setMinutes(minutes);
+      tempDate.setSeconds(0,0);
       setDateOut(tempDate);
       setVis_dateOut(false);
       console.log(dateOut);
@@ -50,8 +58,10 @@ export default function DetailedMapScreen({route, navigation}) {
 
   const toggleModal = () => {
     if (visible == false) {
-      setDateIn(new Date());
-      setDateOut(new Date());
+      let newDate = new Date();
+      newDate.setSeconds(0,0);
+      setDateIn(newDate);
+      setDateOut(newDate);
     }
     setVisible(!visible);
   }
@@ -129,7 +139,7 @@ export default function DetailedMapScreen({route, navigation}) {
     <PaperProvider>
       <View style={{alignItems: 'center', backgroundColor: 'white', flex: 1}}>
       <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 50, color:'black'}}>
-        INTEC - Parqueo de los profesores
+        {orgName} - {lotName}
       </Text>
       <ScrollView contentContainerStyle={{alignItems: 'center'}} style={{width: '100%', height: '70%'}}>
           {RenderParking()}
@@ -154,6 +164,26 @@ export default function DetailedMapScreen({route, navigation}) {
             style={{marginBottom: 15}}>
             {dateOut.toLocaleTimeString()}
           </Text>
+          <Dropdown
+            style={[styles.dropdown, isFocused && { borderColor: 'blue' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            data={carList}
+            search
+            maxHeight={300}
+            labelField="licensePlate"
+            valueField="value"
+            placeholder={!isFocused ? 'Select Car' : '...'}
+            searchPlaceholder="Search..."
+            value={selectedCar}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onChange={item => {
+              setSelectedCar(item.value);
+              setIsFocused(false);
+            }}
+          />
           <View style={{flexDirection: 'row',}}>
             <Text style={{flex: 1, color: '#6563DB', fontWeight: 'bold'}}
               onPress={() => toggleModal()}>
@@ -195,3 +225,24 @@ export default function DetailedMapScreen({route, navigation}) {
     </PaperProvider>
   );
 };
+const styles = StyleSheet.create({
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    width: '95%',
+    marginBottom: 15,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+});
